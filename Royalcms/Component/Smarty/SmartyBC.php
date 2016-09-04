@@ -29,10 +29,6 @@
  * @author Rodney Rehm
  * @package Smarty
  */
-/**
- * @ignore
- */
-require_once(dirname(__FILE__) . '/Smarty.class.php');
 
 /**
  * Smarty Backward Compatability Wrapper Class
