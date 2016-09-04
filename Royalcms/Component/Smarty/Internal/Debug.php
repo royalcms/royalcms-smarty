@@ -1,4 +1,9 @@
 <?php namespace Royalcms\Component\Smarty\Internal;
+
+use Royalcms\Component\Smarty\Smarty;
+use Royalcms\Component\Smarty\Data;
+use Royalcms\Component\Smarty\Internal\Template;
+
 /**
  * Smarty Internal Plugin Debug
  *
@@ -164,12 +169,12 @@ class Debug extends Data
         $smarty->debugging = false;
         $smarty->debugging_ctrl = 'NONE';
         $smarty->force_compile = false;
-        $_template = new Smarty_Internal_Template($smarty->debug_tpl, $smarty);
+        $_template = new Template($smarty->debug_tpl, $smarty);
         $_template->caching = false;
         $_template->disableSecurity();
         $_template->cache_id = null;
         $_template->compile_id = null;
-        if ($obj instanceof Smarty_Internal_Template) {
+        if ($obj instanceof Template) {
             $_template->assign('template_name', $obj->source->type . ':' . $obj->source->name);
         }
         if ($obj instanceof Smarty) {
@@ -195,9 +200,9 @@ class Debug extends Data
         $tpl_vars = array();
         foreach ($obj->tpl_vars as $key => $var) {
             $tpl_vars[$key] = clone $var;
-            if ($obj instanceof Smarty_Internal_Template) {
+            if ($obj instanceof Template) {
                 $tpl_vars[$key]->scope = $obj->source->type . ':' . $obj->source->name;
-            } elseif ($obj instanceof Smarty_Data) {
+            } elseif ($obj instanceof Data) {
                 $tpl_vars[$key]->scope = 'Data object';
             } else {
                 $tpl_vars[$key]->scope = 'Smarty root';

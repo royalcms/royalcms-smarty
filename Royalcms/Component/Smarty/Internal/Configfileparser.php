@@ -1,88 +1,6 @@
 <?php namespace Royalcms\Component\Smarty\Internal;
-/**
-* Smarty Internal Plugin Configfileparser
-*
-* This is the config file parser.
-* It is generated from the internal.configfileparser.y file
-* @package Smarty
-* @subpackage Compiler
-* @author Uwe Tews
-*/
 
-class TPC_yyToken implements ArrayAccess
-{
-    public $string = '';
-    public $metadata = array();
-
-    public function __construct($s, $m = array())
-    {
-        if ($s instanceof TPC_yyToken) {
-            $this->string = $s->string;
-            $this->metadata = $s->metadata;
-        } else {
-            $this->string = (string) $s;
-            if ($m instanceof TPC_yyToken) {
-                $this->metadata = $m->metadata;
-            } elseif (is_array($m)) {
-                $this->metadata = $m;
-            }
-        }
-    }
-
-    public function __toString()
-    {
-        return $this->_string;
-    }
-
-    public function offsetExists($offset)
-    {
-        return isset($this->metadata[$offset]);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->metadata[$offset];
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        if ($offset === null) {
-            if (isset($value[0])) {
-                $x = ($value instanceof TPC_yyToken) ?
-                    $value->metadata : $value;
-                $this->metadata = array_merge($this->metadata, $x);
-
-                return;
-            }
-            $offset = count($this->metadata);
-        }
-        if ($value === null) {
-            return;
-        }
-        if ($value instanceof TPC_yyToken) {
-            if ($value->metadata) {
-                $this->metadata[$offset] = $value->metadata;
-            }
-        } elseif ($value) {
-            $this->metadata[$offset] = $value;
-        }
-    }
-
-    public function offsetUnset($offset)
-    {
-        unset($this->metadata[$offset]);
-    }
-}
-
-class TPC_yyStackEntry
-{
-    public $stateno;       /* The state-number */
-    public $major;         /* The major token value.  This is the code
-                     ** number for the token at this stack level */
-    public $minor; /* The user-supplied minor token value.  This
-                     ** is the value of the token  */
-};
-
+use Royalcms\Component\Smarty\Internal\TPC\yyStackEntry;
 
 #line 12 "smarty_internal_configfileparser.y"
 class Configfileparser#line 80 "smarty_internal_configfileparser.php"
@@ -95,13 +13,14 @@ class Configfileparser#line 80 "smarty_internal_configfileparser.php"
     private $lex;
     private $internalError = false;
 
-    function __construct($lex, $compiler) {
+    public function __construct($lex, $compiler) {
         // set instance object
         self::instance($this); 
         $this->lex = $lex;
         $this->smarty = $compiler->smarty; 
         $this->compiler = $compiler;
     }
+    
     public static function &instance($new_instance = null)
     {
         static $instance = null;
@@ -203,30 +122,35 @@ class Configfileparser#line 80 "smarty_internal_configfileparser.php"
     const YY_ERROR_ACTION = 58;
 
     const YY_SZ_ACTTAB = 38;
-static public $yy_action = array(
- /*     0 */    29,   30,   34,   33,   24,   13,   19,   25,   35,   21,
- /*    10 */    59,    8,    3,    1,   20,   12,   14,   31,   20,   12,
- /*    20 */    15,   17,   23,   18,   27,   26,    4,    5,    6,   32,
- /*    30 */     2,   11,   28,   22,   16,    9,    7,   10,
+    
+    static public $yy_action = array(
+    /*     0 */    29,   30,   34,   33,   24,   13,   19,   25,   35,   21,
+    /*    10 */    59,    8,    3,    1,   20,   12,   14,   31,   20,   12,
+    /*    20 */    15,   17,   23,   18,   27,   26,    4,    5,    6,   32,
+    /*    30 */     2,   11,   28,   22,   16,    9,    7,   10,
     );
+    
     static public $yy_lookahead = array(
- /*     0 */     7,    8,    9,   10,   11,   12,    5,   27,   15,   16,
- /*    10 */    20,   21,   23,   23,   17,   18,   13,   14,   17,   18,
- /*    20 */    15,    2,   17,    4,   25,   26,    6,    3,    3,   14,
- /*    30 */    23,    1,   24,   17,    2,   25,   22,   25,
-);
+    /*     0 */     7,    8,    9,   10,   11,   12,    5,   27,   15,   16,
+    /*    10 */    20,   21,   23,   23,   17,   18,   13,   14,   17,   18,
+    /*    20 */    15,    2,   17,    4,   25,   26,    6,    3,    3,   14,
+    /*    30 */    23,    1,   24,   17,    2,   25,   22,   25,
+    );
+    
     const YY_SHIFT_USE_DFLT = -8;
     const YY_SHIFT_MAX = 19;
     static public $yy_shift_ofst = array(
- /*     0 */    -8,    1,    1,    1,   -7,   -3,   -3,   30,   -8,   -8,
- /*    10 */    -8,   19,    5,    3,   15,   16,   24,   25,   32,   20,
-);
+    /*     0 */    -8,    1,    1,    1,   -7,   -3,   -3,   30,   -8,   -8,
+    /*    10 */    -8,   19,    5,    3,   15,   16,   24,   25,   32,   20,
+    );
     const YY_REDUCE_USE_DFLT = -21;
     const YY_REDUCE_MAX = 10;
+    
     static public $yy_reduce_ofst = array(
- /*     0 */   -10,   -1,   -1,   -1,  -20,   10,   12,    8,   14,    7,
- /*    10 */   -11,
-);
+    /*     0 */   -10,   -1,   -1,   -1,  -20,   10,   12,    8,   14,    7,
+    /*    10 */   -11,
+    );
+    
     static public $yyExpectedTokens = array(
         /* 0 */ array(),
         /* 1 */ array(5, 17, 18, ),
@@ -264,13 +188,15 @@ static public $yy_action = array(
         /* 33 */ array(),
         /* 34 */ array(),
         /* 35 */ array(),
-);
+    );
+    
     static public $yy_default = array(
- /*     0 */    44,   37,   41,   40,   58,   58,   58,   36,   39,   44,
- /*    10 */    44,   58,   58,   58,   58,   58,   58,   58,   58,   58,
- /*    20 */    55,   54,   57,   56,   50,   45,   43,   42,   38,   46,
- /*    30 */    47,   52,   51,   49,   48,   53,
-);
+    /*     0 */    44,   37,   41,   40,   58,   58,   58,   36,   39,   44,
+    /*    10 */    44,   58,   58,   58,   58,   58,   58,   58,   58,   58,
+    /*    20 */    55,   54,   57,   56,   50,   45,   43,   42,   38,   46,
+    /*    30 */    47,   52,   51,   49,   48,   53,
+    );
+    
     const YYNOCODE = 29;
     const YYSTACKDEPTH = 100;
     const YYNSTATE = 36;
@@ -278,8 +204,10 @@ static public $yy_action = array(
     const YYERRORSYMBOL = 19;
     const YYERRSYMDT = 'yy0';
     const YYFALLBACK = 0;
+    
     public static $yyFallback = array(
     );
+    
     public function Trace($TraceFILE, $zTracePrompt)
     {
         if (!$TraceFILE) {
@@ -304,13 +232,13 @@ static public $yy_action = array(
     public $yystack = array();  /* The parser's stack */
 
     public $yyTokenName = array(
-  '$',             'OPENB',         'SECTION',       'CLOSEB',      
-  'DOT',           'ID',            'EQUAL',         'FLOAT',       
-  'INT',           'BOOL',          'SINGLE_QUOTED_STRING',  'DOUBLE_QUOTED_STRING',
-  'TRIPPLE_QUOTES',  'TRIPPLE_TEXT',  'TRIPPLE_QUOTES_END',  'NAKED_STRING',
-  'OTHER',         'NEWLINE',       'COMMENTSTART',  'error',       
-  'start',         'global_vars',   'sections',      'var_list',    
-  'section',       'newline',       'var',           'value',       
+      '$',             'OPENB',         'SECTION',       'CLOSEB',      
+      'DOT',           'ID',            'EQUAL',         'FLOAT',       
+      'INT',           'BOOL',          'SINGLE_QUOTED_STRING',  'DOUBLE_QUOTED_STRING',
+      'TRIPPLE_QUOTES',  'TRIPPLE_TEXT',  'TRIPPLE_QUOTES_END',  'NAKED_STRING',
+      'OTHER',         'NEWLINE',       'COMMENTSTART',  'error',       
+      'start',         'global_vars',   'sections',      'var_list',    
+      'section',       'newline',       'var',           'value',       
     );
 
     public static $yyRuleName = array(
@@ -425,7 +353,7 @@ static public $yy_action = array(
                     if ($nextstate < self::YYNSTATE) {
                         // we need to shift a non-terminal
                         $this->yyidx++;
-                        $x = new TPC_yyStackEntry;
+                        $x = new yyStackEntry;
                         $x->stateno = $nextstate;
                         $x->major = self::$yyRuleInfo[$yyruleno]['lhs'];
                         $this->yystack[$this->yyidx] = $x;
@@ -494,7 +422,7 @@ static public $yy_action = array(
                     if ($nextstate < self::YYNSTATE) {
                         // we need to shift a non-terminal
                         $this->yyidx++;
-                        $x = new TPC_yyStackEntry;
+                        $x = new yyStackEntry;
                         $x->stateno = $nextstate;
                         $x->major = self::$yyRuleInfo[$yyruleno]['lhs'];
                         $this->yystack[$this->yyidx] = $x;
@@ -606,7 +534,7 @@ static public $yy_action = array(
 
             return;
         }
-        $yytos = new TPC_yyStackEntry;
+        $yytos = new yyStackEntry;
         $yytos->stateno = $yyNewState;
         $yytos->major = $yyMajor;
         $yytos->minor = $yypMinor;
@@ -787,7 +715,7 @@ static public $yy_action = array(
         if ($yyact < self::YYNSTATE) {
             if (!$this->yyTraceFILE && $yysize) {
                 $this->yyidx++;
-                $x = new TPC_yyStackEntry;
+                $x = new yyStackEntry;
                 $x->stateno = $yyact;
                 $x->major = $yygoto;
                 $x->minor = $yy_lefthand_side;
@@ -842,7 +770,7 @@ static public $yy_action = array(
         if ($this->yyidx === null || $this->yyidx < 0) {
             $this->yyidx = 0;
             $this->yyerrcnt = -1;
-            $x = new TPC_yyStackEntry;
+            $x = new yyStackEntry;
             $x->stateno = 0;
             $x->major = 0;
             $this->yystack = array();

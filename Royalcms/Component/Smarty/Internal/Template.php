@@ -1,4 +1,21 @@
 <?php namespace Royalcms\Component\Smarty\Internal;
+
+use Exception;
+use ArrayAccess;
+use Iterator;
+use Countable;
+use IteratorAggregate;
+use PDOStatement;
+use Traversable;
+use Royalcms\Component\Smarty\Smarty;
+use Royalcms\Component\Smarty\SmartyException;
+use Royalcms\Component\Smarty\Variable;
+use Royalcms\Component\Smarty\Resource;
+use Royalcms\Component\Smarty\CacheResource;
+use Royalcms\Component\Smarty\Template\Cached;
+use Royalcms\Component\Smarty\Internal\Template;
+use Royalcms\Component\Smarty\Internal\Write\File;
+
 /**
  * Smarty Internal Plugin Template
  *
@@ -19,7 +36,7 @@
  * @property Smarty_Template_Compiled $compiled
  * @property Smarty_Template_Cached   $cached
  */
-class Template extends Smarty_Internal_TemplateBase
+class Template extends TemplateBase
 {
     /**
      * cache_id
@@ -127,7 +144,7 @@ class Template extends Smarty_Internal_TemplateBase
         // Template resource
         $this->template_resource = $template_resource;
         // copy block data of template inheritance
-        if ($this->parent instanceof Smarty_Internal_Template) {
+        if ($this->parent instanceof Template) {
             $this->block_data = $this->parent->block_data;
         }
     }
@@ -142,7 +159,7 @@ class Template extends Smarty_Internal_TemplateBase
     public function mustCompile()
     {
         if (!$this->source->exists) {
-            if ($this->parent instanceof Smarty_Internal_Template) {
+            if ($this->parent instanceof Template) {
                 $parent_resource = " in '$this->parent->template_resource}'";
             } else {
                 $parent_resource = '';
@@ -197,7 +214,7 @@ class Template extends Smarty_Internal_TemplateBase
             $_filepath = $this->compiled->filepath;
             if ($_filepath === false)
                 throw new SmartyException('getCompiledFilepath() did not return a destination to save the compiled template to');
-            Smarty_Internal_Write_File::writeFile($_filepath, $code, $this->smarty);
+            File::writeFile($_filepath, $code, $this->smarty);
             $this->compiled->exists = true;
             $this->compiled->isCompiled = true;
         }
@@ -243,7 +260,7 @@ class Template extends Smarty_Internal_TemplateBase
     {
         // already in template cache?
         if ($this->smarty->allow_ambiguous_resources) {
-            $_templateId = Smarty_Resource::getUniqueTemplateName($this, $template) . $cache_id . $compile_id;
+            $_templateId = Resource::getUniqueTemplateName($this, $template) . $cache_id . $compile_id;
         } else {
             $_templateId = $this->smarty->joined_template_dir . '#' . $template . $cache_id . $compile_id;
         }
@@ -277,7 +294,7 @@ class Template extends Smarty_Internal_TemplateBase
         if (!empty($data)) {
             // set up variable values
             foreach ($data as $_key => $_val) {
-                $tpl->tpl_vars[$_key] = new Smarty_variable($_val);
+                $tpl->tpl_vars[$_key] = new Variable($_val);
             }
         }
 
@@ -318,7 +335,7 @@ class Template extends Smarty_Internal_TemplateBase
         if (!empty($data)) {
             // set up variable values
             foreach ($data as $_key => $_val) {
-                $tpl->tpl_vars[$_key] = new Smarty_variable($_val);
+                $tpl->tpl_vars[$_key] = new Variable($_val);
             }
         }
 
@@ -457,7 +474,7 @@ class Template extends Smarty_Internal_TemplateBase
                 } elseif ($_file_to_check[2] == 'string') {
                     continue;
                 } else {
-                    $source = Smarty_Resource::source(null, $this->smarty, $_file_to_check[0]);
+                    $source = Resource::source(null, $this->smarty, $_file_to_check[0]);
                     $mtime = $source->timestamp;
                 }
                 if (!$mtime || $mtime > $_file_to_check[1]) {
@@ -494,7 +511,7 @@ class Template extends Smarty_Internal_TemplateBase
     public function createLocalArrayVariable($tpl_var, $nocache = false, $scope = Smarty::SCOPE_LOCAL)
     {
         if (!isset($this->tpl_vars[$tpl_var])) {
-            $this->tpl_vars[$tpl_var] = new Smarty_variable(array(), $nocache, $scope);
+            $this->tpl_vars[$tpl_var] = new Variable(array(), $nocache, $scope);
         } else {
             $this->tpl_vars[$tpl_var] = clone $this->tpl_vars[$tpl_var];
             if ($scope != Smarty::SCOPE_LOCAL) {
@@ -601,7 +618,7 @@ class Template extends Smarty_Internal_TemplateBase
     */
     public function clearCache($exp_time=null)
     {
-        Smarty_CacheResource::invalidLoadedCache($this->smarty);
+        CacheResource::invalidLoadedCache($this->smarty);
 
         return $this->cached->handler->clear($this->smarty, $this->template_name, $this->cache_id, $this->compile_id, $exp_time);
     }
@@ -647,7 +664,7 @@ class Template extends Smarty_Internal_TemplateBase
                 if (strlen($this->template_resource) == 0) {
                     throw new SmartyException('Missing template name');
                 }
-                $this->source = Smarty_Resource::source($this);
+                $this->source = Resource::source($this);
                 // cache template object under a unique ID
                 // do not cache eval resources
                 if ($this->source->type != 'eval') {
@@ -674,7 +691,7 @@ class Template extends Smarty_Internal_TemplateBase
                 if (!class_exists('Smarty_Template_Cached')) {
                     include SMARTY_SYSPLUGINS_DIR . 'smarty_cacheresource.php';
                 }
-                $this->cached = new Smarty_Template_Cached($this);
+                $this->cached = new Cached($this);
 
                 return $this->cached;
 

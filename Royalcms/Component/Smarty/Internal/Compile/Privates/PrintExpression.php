@@ -1,5 +1,7 @@
 <?php namespace Royalcms\Component\Smarty\Internal\Compile\Privates;
 
+use Royalcms\Component\Smarty\Smarty;
+use Royalcms\Component\Smarty\SmartyException;
 use Royalcms\Component\Smarty\Internal\CompileBase;
 
 /**

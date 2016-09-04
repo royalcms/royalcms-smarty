@@ -1,5 +1,7 @@
 <?php namespace Royalcms\Component\Smarty\Internal;
 
+use Royalcms\Component\Smarty\SmartyCompilerException;
+
 /**
  * Smarty Internal Plugin Smarty Template Compiler Base
  *

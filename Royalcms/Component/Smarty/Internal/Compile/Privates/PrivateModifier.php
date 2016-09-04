@@ -1,5 +1,6 @@
 <?php namespace Royalcms\Component\Smarty\Internal\Compile\Privates;
 
+use Royalcms\Component\Smarty\Smarty;
 use Royalcms\Component\Smarty\Internal\CompileBase;
 
 
@@ -86,7 +87,7 @@ class PrivateModifier extends CompileBase
                         break;
                     case 4:
                         // modifier plugin
-                        if ($function = $compiler->getPlugin($modifier, Smarty::PLUGIN_MODIFIER)) {
+                        if (($function = $compiler->getPlugin($modifier, Smarty::PLUGIN_MODIFIER)) !== false) {
                             // check if modifier allowed
                             if (!is_object($compiler->smarty->security_policy) || $compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
                                 $output = "{$function}({$params})";

@@ -1,4 +1,7 @@
-<?php
+<?php namespace Royalcms\Component\Smarty\Internal\Functions\Call;
+
+use Royalcms\Component\Smarty\Internal\Template;
+
 /**
  * Smarty Internal Plugin Function Call Handler
  *
@@ -13,7 +16,7 @@
  * @package Smarty
  * @subpackage PluginsInternal
  */
-class Smarty_Internal_Function_Call_Handler
+class Handler
 {
     /**
      * This function handles calls to template functions defined by {function}
@@ -25,7 +28,7 @@ class Smarty_Internal_Function_Call_Handler
      * @param string                   $_hash     nocache hash value
      * @param bool                     $_nocache  nocache flag
      */
-    public static function call($_name, Smarty_Internal_Template $_template, $_params, $_hash, $_nocache)
+    public static function call($_name, Template $_template, $_params, $_hash, $_nocache)
     {
         if ($_nocache) {
             $_function = "smarty_template_function_{$_name}_nocache";
