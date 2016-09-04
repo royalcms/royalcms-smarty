@@ -1514,28 +1514,30 @@ if (Smarty::$_CHARSET !== 'UTF-8') {
 
 
 
-
-
-/**
- * Autoloader
- */
-function smartyAutoload($class)
-{
-    $_class = strtolower($class);
-    static $_classes = array(
-        'smarty_config_source' => true,
-        'smarty_config_compiled' => true,
-        'smarty_security' => true,
-        'smarty_cacheresource' => true,
-        'smarty_cacheresource_custom' => true,
-        'smarty_cacheresource_keyvaluestore' => true,
-        'smarty_resource' => true,
-        'smarty_resource_custom' => true,
-        'smarty_resource_uncompiled' => true,
-        'smarty_resource_recompiled' => true,
-    );
-
-    if (!strncmp($_class, 'smarty_internal_', 16) || isset($_classes[$_class])) {
-        include SMARTY_SYSPLUGINS_DIR . $_class . '.php';
+if (function_exists('smartyAutoload')) {
+    /**
+     * Autoloader
+     */
+    function smartyAutoload($class)
+    {
+        $_class = strtolower($class);
+        static $_classes = array(
+            'smarty_config_source' => true,
+            'smarty_config_compiled' => true,
+            'smarty_security' => true,
+            'smarty_cacheresource' => true,
+            'smarty_cacheresource_custom' => true,
+            'smarty_cacheresource_keyvaluestore' => true,
+            'smarty_resource' => true,
+            'smarty_resource_custom' => true,
+            'smarty_resource_uncompiled' => true,
+            'smarty_resource_recompiled' => true,
+        );
+    
+        if (!strncmp($_class, 'smarty_internal_', 16) || isset($_classes[$_class])) {
+            include SMARTY_SYSPLUGINS_DIR . $_class . '.php';
+        }
     }
 }
+
+
