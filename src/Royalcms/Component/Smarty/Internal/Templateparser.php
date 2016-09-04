@@ -1,7 +1,7 @@
 <?php namespace Royalcms\Component\Smarty\Internal;
 
 use Royalcms\Component\Smarty\Smarty;
-use Royalcms\Component\Smarty\Internal\Compile\CompileBlock;
+use Royalcms\Component\Smarty\Internal\Compile\BlockTag;
 use Royalcms\Component\Smarty\Internal\TPC\yyStackEntry;
 use Royalcms\Component\Smarty\Internal\Parsetrees\Text;
 use Royalcms\Component\Smarty\Internal\Parsetrees\Tag;
@@ -2234,9 +2234,9 @@ class Templateparser#line 80 "smarty_internal_templateparser.php"
 #line 260 "smarty_internal_templateparser.y"
     function yy_r16(){
         if ($this->strip) {
-            CompileBlock::blockSource($this->compiler, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', $this->yystack[$this->yyidx + 0]->minor));
+            BlockTag::blockSource($this->compiler, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', $this->yystack[$this->yyidx + 0]->minor));
         } else {
-            CompileBlock::blockSource($this->compiler, $this->yystack[$this->yyidx + 0]->minor);
+            BlockTag::blockSource($this->compiler, $this->yystack[$this->yyidx + 0]->minor);
         }
     }
 #line 2301 "smarty_internal_templateparser.php"

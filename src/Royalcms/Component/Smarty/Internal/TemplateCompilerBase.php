@@ -379,9 +379,9 @@ abstract class TemplateCompilerBase
                     if (!in_array($methode, $this->smarty->registered_objects[$tag][3]) &&
                         (empty($this->smarty->registered_objects[$tag][1]) || in_array($methode, $this->smarty->registered_objects[$tag][1]))
                     ) {
-                        return $this->callTagCompiler('private_object_function', $args, $parameter, $tag, $methode);
+                        return $this->callTagCompiler('Privates\ObjectFunction', $args, $parameter, $tag, $methode);
                     } elseif (in_array($methode, $this->smarty->registered_objects[$tag][3])) {
-                        return $this->callTagCompiler('private_object_block_function', $args, $parameter, $tag, $methode);
+                        return $this->callTagCompiler('Privates\ObjectBlockFunction', $args, $parameter, $tag, $methode);
                     } else {
                         return $this->trigger_template_error('unallowed methode "' . $methode . '" in registered object "' . $tag . '"', $this->lex->taglineno);
                     }
@@ -413,7 +413,7 @@ abstract class TemplateCompilerBase
                         }
                         // compile registered function or block function
                         if ($plugin_type == Smarty::PLUGIN_FUNCTION || $plugin_type == Smarty::PLUGIN_BLOCK) {
-                            return $this->callTagCompiler('private_registered_' . $plugin_type, $args, $parameter, $tag);
+                            return $this->callTagCompiler('Privates\Registered_' . $plugin_type, $args, $parameter, $tag);
                         }
                     }
                 }
@@ -444,7 +444,7 @@ abstract class TemplateCompilerBase
                     } else {
                         if (($function = $this->getPlugin($tag, $plugin_type)) !== false) {
                             if (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this)) {
-                                return $this->callTagCompiler('private_' . $plugin_type . '_plugin', $args, $parameter, $tag, $function);
+                                return $this->callTagCompiler('Privates\\' . $plugin_type . '_plugin', $args, $parameter, $tag, $function);
                             }
                         }
                     }
@@ -494,18 +494,18 @@ abstract class TemplateCompilerBase
                 if (isset($this->smarty->registered_objects[$base_tag]) && isset($parameter['object_methode'])) {
                     $methode = $parameter['object_methode'];
                     if (in_array($methode, $this->smarty->registered_objects[$base_tag][3])) {
-                        return $this->callTagCompiler('private_object_block_function', $args, $parameter, $tag, $methode);
+                        return $this->callTagCompiler('Privates\ObjectBlockFunction', $args, $parameter, $tag, $methode);
                     } else {
                         return $this->trigger_template_error('unallowed closing tag methode "' . $methode . '" in registered object "' . $base_tag . '"', $this->lex->taglineno);
                     }
                 }
                 // registered block tag ?
                 if (isset($this->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$base_tag]) || isset($this->default_handler_plugins[Smarty::PLUGIN_BLOCK][$base_tag])) {
-                    return $this->callTagCompiler('private_registered_block', $args, $parameter, $tag);
+                    return $this->callTagCompiler('Privates\RegisteredBlock', $args, $parameter, $tag);
                 }
                 // block plugin?
                 if (($function = $this->getPlugin($base_tag, Smarty::PLUGIN_BLOCK)) !== false) {
-                    return $this->callTagCompiler('private_block_plugin', $args, $parameter, $tag, $function);
+                    return $this->callTagCompiler('Privates\BlockPlugin', $args, $parameter, $tag, $function);
                 }
                 // registered compiler plugin ?
                 if (isset($this->smarty->registered_plugins[Smarty::PLUGIN_COMPILER][$tag])) {
@@ -563,7 +563,7 @@ abstract class TemplateCompilerBase
             return self::$_tag_objects[$tag]->compile($args, $this, $param1, $param2, $param3);
         }
         // lazy load internal compiler plugin
-        $class_name = 'Smarty_Internal_Compile_' . $tag;
+        $class_name = '\Royalcms\Component\Smarty\Internal\Compile\\' . ucfirst($tag) . 'Tag';
         if ($this->smarty->loadPlugin($class_name)) {
             // check if tag allowed by security
             if (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this)) {
