@@ -1,5 +1,5 @@
 <phpunit
-        bootstrap="tests/Bootstrap.php"
+        bootstrap="Bootstrap.php"
         colors="true"
         backupGlobals="false"
         backupStaticAttributes="false"
@@ -12,7 +12,7 @@
     <filter>
         <testsuites>
             <testsuite name="Smarty Test Suite">
-                <directory>tests/UnitTests</directory>
+                <directory>UnitTests</directory>
             </testsuite>
         </testsuites>
         <blacklist>
