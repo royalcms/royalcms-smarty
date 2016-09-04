@@ -1,7 +1,7 @@
 <?php namespace Royalcms\Component\Smarty\Internal\Compile;
 
 use Royalcms\Component\Smarty\Smarty;
-use Royalcms\Component\Smarty\SmartyBC;
+// use Royalcms\Component\Smarty\SmartyBC;
 use Royalcms\Component\Smarty\Variable;
 use Royalcms\Component\Smarty\Internal\CompileBase;
 
@@ -69,13 +69,13 @@ class CompileAssign extends CompileBase
             $output = "<?php \$_smarty_tpl->createLocalArrayVariable($_attr[var], $_nocache, $_scope);\n\$_smarty_tpl->tpl_vars[$_attr[var]]->value$parameter[smarty_internal_index] = $_attr[value];";
         } else {
             // implement Smarty2's behaviour of variables assigned by reference
-            if ($compiler->template->smarty instanceof SmartyBC) {
-                $output = "<?php if (isset(\$_smarty_tpl->tpl_vars[$_attr[var]])) {\$_smarty_tpl->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];";
-                $output .= "\n\$_smarty_tpl->tpl_vars[$_attr[var]]->value = $_attr[value]; \$_smarty_tpl->tpl_vars[$_attr[var]]->nocache = $_nocache; \$_smarty_tpl->tpl_vars[$_attr[var]]->scope = $_scope;";
-                $output .= "\n} else \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], $_nocache, $_scope);";
-            } else {
-                $output = "<?php \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], $_nocache, $_scope);";
-            }
+//             if ($compiler->template->smarty instanceof SmartyBC) {
+//                 $output = "<?php if (isset(\$_smarty_tpl->tpl_vars[$_attr[var]])) {\$_smarty_tpl->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];";
+//                 $output .= "\n\$_smarty_tpl->tpl_vars[$_attr[var]]->value = $_attr[value]; \$_smarty_tpl->tpl_vars[$_attr[var]]->nocache = $_nocache; \$_smarty_tpl->tpl_vars[$_attr[var]]->scope = $_scope;";
+//                 $output .= "\n} else \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], $_nocache, $_scope);";
+//             } else {
+                $output = "<?php \$_smarty_tpl->tpl_vars[$_attr[var]] = new \Royalcms\Component\Smarty\Variable($_attr[value], $_nocache, $_scope);";
+//             }
         }
         if ($_scope == Smarty::SCOPE_PARENT) {
             $output .= "\nif (\$_smarty_tpl->parent != null) \$_smarty_tpl->parent->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];";

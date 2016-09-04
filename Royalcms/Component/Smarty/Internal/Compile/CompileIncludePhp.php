@@ -1,6 +1,6 @@
 <?php namespace Royalcms\Component\Smarty\Internal\Compile;
 
-use Royalcms\Component\Smarty\SmartyBC;
+// use Royalcms\Component\Smarty\SmartyBC;
 use Royalcms\Component\Smarty\SmartyException;
 use Royalcms\Component\Smarty\Internal\CompileBase;
 
@@ -53,9 +53,9 @@ class CompileIncludePhp extends CompileBase
      */
     public function compile($args, $compiler)
     {
-        if (!($compiler->smarty instanceof SmartyBC)) {
-            throw new SmartyException("{include_php} is deprecated, use SmartyBC class to enable");
-        }
+//         if (!($compiler->smarty instanceof SmartyBC)) {
+//             throw new SmartyException("{include_php} is deprecated, use SmartyBC class to enable");
+//         }
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 

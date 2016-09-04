@@ -3,6 +3,12 @@
 use Royalcms\Component\Smarty\Smarty;
 use Royalcms\Component\Smarty\Internal\Compile\CompileBlock;
 use Royalcms\Component\Smarty\Internal\TPC\yyStackEntry;
+use Royalcms\Component\Smarty\Internal\Parsetrees\Text;
+use Royalcms\Component\Smarty\Internal\Parsetrees\Tag;
+use Royalcms\Component\Smarty\Internal\Parsetrees\TemplateBuffer;
+use Royalcms\Component\Smarty\Internal\Parsetrees\Code;
+use Royalcms\Component\Smarty\Internal\Parsetrees\DqContent;
+use Royalcms\Component\Smarty\Internal\Parsetrees\Doublequoted;
 
 #line 13 "smarty_internal_templateparser.y"
 class Templateparser#line 80 "smarty_internal_templateparser.php"
@@ -35,7 +41,7 @@ class Templateparser#line 80 "smarty_internal_templateparser.php"
         }
         $this->is_xml = false;
         $this->asp_tags = (ini_get('asp_tags') != '0');
-        $this->current_buffer = $this->root_buffer = new _smarty_template_buffer($this);
+        $this->current_buffer = $this->root_buffer = new TemplateBuffer($this);
     }
 
     public static function escape_start_tag($tag_text) {
@@ -2105,20 +2111,20 @@ class Templateparser#line 80 "smarty_internal_templateparser.php"
 #line 2170 "smarty_internal_templateparser.php"
 #line 141 "smarty_internal_templateparser.y"
     function yy_r6(){
-    $this->_retvalue = new _smarty_text($this, $this->yystack[$this->yyidx + 0]->minor);
+    $this->_retvalue = new Text($this, $this->yystack[$this->yyidx + 0]->minor);
     }
 #line 2175 "smarty_internal_templateparser.php"
 #line 146 "smarty_internal_templateparser.y"
     function yy_r7(){
     if ($this->php_handling == Smarty::PHP_PASSTHRU) {
-        $this->_retvalue = new _smarty_text($this, self::escape_start_tag($this->yystack[$this->yyidx + 0]->minor));
+        $this->_retvalue = new Text($this, self::escape_start_tag($this->yystack[$this->yyidx + 0]->minor));
     } elseif ($this->php_handling == Smarty::PHP_QUOTE) {
-        $this->_retvalue = new _smarty_text($this, htmlspecialchars($this->yystack[$this->yyidx + 0]->minor, ENT_QUOTES));
+        $this->_retvalue = new Text($this, htmlspecialchars($this->yystack[$this->yyidx + 0]->minor, ENT_QUOTES));
     } elseif ($this->php_handling == Smarty::PHP_ALLOW) {
-        if (!($this->smarty instanceof SmartyBC)) {
-            $this->compiler->trigger_template_error (self::Err3);
-        }
-        $this->_retvalue = new _smarty_text($this, $this->compiler->processNocacheCode('<?php', true));
+//         if (!($this->smarty instanceof SmartyBC)) {
+//             $this->compiler->trigger_template_error (self::Err3);
+//         }
+        $this->_retvalue = new Text($this, $this->compiler->processNocacheCode('<?php', true));
     } elseif ($this->php_handling == Smarty::PHP_REMOVE) {
         $this->_retvalue = null;
     }
@@ -2130,14 +2136,14 @@ class Templateparser#line 80 "smarty_internal_templateparser.php"
         $this->compiler->tag_nocache = true; 
         $this->is_xml = false;
         $save = $this->template->has_nocache_code; 
-        $this->_retvalue = new _smarty_text($this, $this->compiler->processNocacheCode("<?php echo '?>';?>\n", $this->compiler, true));
+        $this->_retvalue = new Text($this, $this->compiler->processNocacheCode("<?php echo '?>';?>\n", $this->compiler, true));
         $this->template->has_nocache_code = $save; 
     } elseif ($this->php_handling == Smarty::PHP_PASSTHRU) {
-        $this->_retvalue = new _smarty_text($this, '?<?php ?>>');
+        $this->_retvalue = new Text($this, '?<?php ?>>');
     } elseif ($this->php_handling == Smarty::PHP_QUOTE) {
-        $this->_retvalue = new _smarty_text($this, htmlspecialchars('?>', ENT_QUOTES));
+        $this->_retvalue = new Text($this, htmlspecialchars('?>', ENT_QUOTES));
     } elseif ($this->php_handling == Smarty::PHP_ALLOW) {
-        $this->_retvalue = new _smarty_text($this, $this->compiler->processNocacheCode('?>', true));
+        $this->_retvalue = new Text($this, $this->compiler->processNocacheCode('?>', true));
     } elseif ($this->php_handling == Smarty::PHP_REMOVE) {
         $this->_retvalue = null;
     }
@@ -2146,23 +2152,23 @@ class Templateparser#line 80 "smarty_internal_templateparser.php"
 #line 181 "smarty_internal_templateparser.y"
     function yy_r9(){
     if ($this->php_handling == Smarty::PHP_PASSTHRU) {
-        $this->_retvalue = new _smarty_text($this, '<<?php ?>%');
+        $this->_retvalue = new Text($this, '<<?php ?>%');
     } elseif ($this->php_handling == Smarty::PHP_QUOTE) {
-        $this->_retvalue = new _smarty_text($this, htmlspecialchars($this->yystack[$this->yyidx + 0]->minor, ENT_QUOTES));
+        $this->_retvalue = new Text($this, htmlspecialchars($this->yystack[$this->yyidx + 0]->minor, ENT_QUOTES));
     } elseif ($this->php_handling == Smarty::PHP_ALLOW) {
         if ($this->asp_tags) {
-            if (!($this->smarty instanceof SmartyBC)) {
-                $this->compiler->trigger_template_error (self::Err3);
-            }
-            $this->_retvalue = new _smarty_text($this, $this->compiler->processNocacheCode('<%', true));
+//             if (!($this->smarty instanceof SmartyBC)) {
+//                 $this->compiler->trigger_template_error (self::Err3);
+//             }
+            $this->_retvalue = new Text($this, $this->compiler->processNocacheCode('<%', true));
         } else {
-            $this->_retvalue = new _smarty_text($this, '<<?php ?>%');
+            $this->_retvalue = new Text($this, '<<?php ?>%');
         }
     } elseif ($this->php_handling == Smarty::PHP_REMOVE) {
         if ($this->asp_tags) {
             $this->_retvalue = null;
         } else {
-            $this->_retvalue = new _smarty_text($this, '<<?php ?>%');
+            $this->_retvalue = new Text($this, '<<?php ?>%');
         }
     }
     }
@@ -2170,20 +2176,20 @@ class Templateparser#line 80 "smarty_internal_templateparser.php"
 #line 205 "smarty_internal_templateparser.y"
     function yy_r10(){
     if ($this->php_handling == Smarty::PHP_PASSTHRU) {
-        $this->_retvalue = new _smarty_text($this, '%<?php ?>>');
+        $this->_retvalue = new Text($this, '%<?php ?>>');
     } elseif ($this->php_handling == Smarty::PHP_QUOTE) {
-        $this->_retvalue = new _smarty_text($this, htmlspecialchars('%>', ENT_QUOTES));
+        $this->_retvalue = new Text($this, htmlspecialchars('%>', ENT_QUOTES));
     } elseif ($this->php_handling == Smarty::PHP_ALLOW) {
         if ($this->asp_tags) {
-            $this->_retvalue = new _smarty_text($this, $this->compiler->processNocacheCode('%>', true));
+            $this->_retvalue = new Text($this, $this->compiler->processNocacheCode('%>', true));
         } else {
-            $this->_retvalue = new _smarty_text($this, '%<?php ?>>');
+            $this->_retvalue = new Text($this, '%<?php ?>>');
         }
     } elseif ($this->php_handling == Smarty::PHP_REMOVE) {
         if ($this->asp_tags) {
             $this->_retvalue = null;
         } else {
-            $this->_retvalue = new _smarty_text($this, '%<?php ?>>');
+            $this->_retvalue = new Text($this, '%<?php ?>>');
         }
     }
     }
@@ -2191,9 +2197,9 @@ class Templateparser#line 80 "smarty_internal_templateparser.php"
 #line 225 "smarty_internal_templateparser.y"
     function yy_r11(){
     if ($this->strip) {
-        $this->_retvalue = new _smarty_text($this, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', self::escape_start_tag($this->yystack[$this->yyidx + 0]->minor))); 
+        $this->_retvalue = new Text($this, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', self::escape_start_tag($this->yystack[$this->yyidx + 0]->minor))); 
     } else {
-        $this->_retvalue = new _smarty_text($this, self::escape_start_tag($this->yystack[$this->yyidx + 0]->minor));  
+        $this->_retvalue = new Text($this, self::escape_start_tag($this->yystack[$this->yyidx + 0]->minor));  
     }
     }
 #line 2264 "smarty_internal_templateparser.php"
@@ -2202,16 +2208,16 @@ class Templateparser#line 80 "smarty_internal_templateparser.php"
     $this->compiler->tag_nocache = true;
     $this->is_xml = true; 
     $save = $this->template->has_nocache_code; 
-    $this->_retvalue = new _smarty_text($this, $this->compiler->processNocacheCode("<?php echo '<?xml';?>", $this->compiler, true));
+    $this->_retvalue = new Text($this, $this->compiler->processNocacheCode("<?php echo '<?xml';?>", $this->compiler, true));
     $this->template->has_nocache_code = $save;
     }
 #line 2273 "smarty_internal_templateparser.php"
 #line 243 "smarty_internal_templateparser.y"
     function yy_r13(){
         if ($this->strip) {
-            $this->_retvalue = new _smarty_text($this, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', $this->yystack[$this->yyidx + 0]->minor));
+            $this->_retvalue = new Text($this, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', $this->yystack[$this->yyidx + 0]->minor));
         } else {
-            $this->_retvalue = new _smarty_text($this, $this->yystack[$this->yyidx + 0]->minor);
+            $this->_retvalue = new Text($this, $this->yystack[$this->yyidx + 0]->minor);
         }
     }
 #line 2282 "smarty_internal_templateparser.php"
@@ -2976,32 +2982,32 @@ class Templateparser#line 80 "smarty_internal_templateparser.php"
 #line 3041 "smarty_internal_templateparser.php"
 #line 1222 "smarty_internal_templateparser.y"
     function yy_r195(){
-    $this->_retvalue = new _smarty_doublequoted($this, $this->yystack[$this->yyidx + 0]->minor);
+    $this->_retvalue = new Doublequoted($this, $this->yystack[$this->yyidx + 0]->minor);
     }
 #line 3046 "smarty_internal_templateparser.php"
 #line 1226 "smarty_internal_templateparser.y"
     function yy_r196(){
-    $this->_retvalue = new _smarty_code($this, '(string)'.$this->yystack[$this->yyidx + -1]->minor);
+    $this->_retvalue = new Code($this, '(string)'.$this->yystack[$this->yyidx + -1]->minor);
     }
 #line 3051 "smarty_internal_templateparser.php"
 #line 1234 "smarty_internal_templateparser.y"
     function yy_r198(){
-    $this->_retvalue = new _smarty_code($this, '(string)$_smarty_tpl->tpl_vars[\''. substr($this->yystack[$this->yyidx + 0]->minor,1) .'\']->value');
+    $this->_retvalue = new Code($this, '(string)$_smarty_tpl->tpl_vars[\''. substr($this->yystack[$this->yyidx + 0]->minor,1) .'\']->value');
     }
 #line 3056 "smarty_internal_templateparser.php"
 #line 1242 "smarty_internal_templateparser.y"
     function yy_r200(){
-    $this->_retvalue = new _smarty_code($this, '(string)('.$this->yystack[$this->yyidx + -1]->minor.')');
+    $this->_retvalue = new Code($this, '(string)('.$this->yystack[$this->yyidx + -1]->minor.')');
     }
 #line 3061 "smarty_internal_templateparser.php"
 #line 1246 "smarty_internal_templateparser.y"
     function yy_r201(){
-    $this->_retvalue = new _smarty_tag($this, $this->yystack[$this->yyidx + -1]->minor);
+    $this->_retvalue = new Tag($this, $this->yystack[$this->yyidx + -1]->minor);
     }
 #line 3066 "smarty_internal_templateparser.php"
 #line 1250 "smarty_internal_templateparser.y"
     function yy_r202(){
-    $this->_retvalue = new _smarty_dq_content($this, $this->yystack[$this->yyidx + 0]->minor);
+    $this->_retvalue = new DqContent($this, $this->yystack[$this->yyidx + 0]->minor);
     }
 #line 3071 "smarty_internal_templateparser.php"
 
