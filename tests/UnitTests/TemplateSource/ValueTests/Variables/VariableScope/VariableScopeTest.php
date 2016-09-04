@@ -1,4 +1,6 @@
 <?php
+use Royalcms\Component\Smarty\Data;
+
 /**
  * Smarty PHPunit tests variable scope
  *
@@ -61,24 +63,24 @@ class VariableScopeTest extends PHPUnit_Smarty
      */
     public function testVariableScope2()
     {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new Data($this->smarty);
+        $data2 = new Data($data1);
         $tpl = $this->smarty->createTemplate('foo.tpl', null, null, $data2);
         $this->assertEquals("bar", $this->smarty->fetch($tpl));
     }
 
     public function testVariableScope22()
     {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new Data($this->smarty);
+        $data2 = new Data($data1);
         $tpl = $this->smarty->createTemplate('foo.tpl', $data2);
         $this->assertEquals("bar", $this->smarty->fetch($tpl));
     }
 
     public function testVariableScope23()
     {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new Data($this->smarty);
+        $data2 = new Data($data1);
         $tpl = $this->smarty->createTemplate('foo.tpl', $data2);
         $this->assertEquals("bar", $tpl->fetch());
     }
@@ -88,9 +90,9 @@ class VariableScopeTest extends PHPUnit_Smarty
      */
     public function testVariableScope3()
     {
-        $data1 = new Smarty_Data($this->smarty);
+        $data1 = new Data($this->smarty);
         $data1->assign('foo', 'newvalue');
-        $data2 = new Smarty_Data($data1);
+        $data2 = new Data($data1);
         $tpl = $this->smarty->createTemplate('foo.tpl', null, null, $data2);
         // must see the new value
         $this->assertEquals("newvalue", $this->smarty->fetch($tpl));
@@ -98,8 +100,8 @@ class VariableScopeTest extends PHPUnit_Smarty
 
     public function testVariableScope32()
     {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new Data($this->smarty);
+        $data2 = new Data($data1);
         $tpl = $this->smarty->createTemplate('foo.tpl', $data2);
         // must see the old value at root
         $this->assertEquals("bar", $this->smarty->fetch($tpl));

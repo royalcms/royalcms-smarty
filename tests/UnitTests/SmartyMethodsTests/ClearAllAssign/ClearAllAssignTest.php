@@ -1,4 +1,6 @@
 <?php
+use Royalcms\Component\Smarty\Data;
+
 /**
  * Smarty PHPunit tests clearing all assigned variables
  *
@@ -21,7 +23,7 @@ class ClearAllAssignTest extends PHPUnit_Smarty
         $this->setUpSmarty(__DIR__);
 
         $this->smarty->assign('foo', 'foo');
-        $this->_data = new Smarty_Data($this->smarty);
+        $this->_data = new Data($this->smarty);
         $this->_data->assign('bar', 'bar');
         $this->_tpl = $this->smarty->createTemplate('eval:{$foo}{$bar}{$blar}', null, null, $this->_data);
         $this->_tpl->assign('blar', 'blar');

@@ -1,4 +1,7 @@
 <?php
+use Royalcms\Component\Smarty\Smarty;
+use Royalcms\Component\Smarty\SmartyException;
+
 /**
  * Smarty PHPunit tests for security
  *
@@ -13,15 +16,12 @@
  */
 class SecurityTest extends PHPUnit_Smarty
 {
-    public $loadSmartyBC = true;
     public function setUp()
     {
         $this->setUpSmarty(__DIR__);
 
         $this->smarty->setForceCompile(true);
         $this->smarty->enableSecurity();
-        $this->smartyBC->setForceCompile(true);
-        $this->smartyBC->enableSecurity();
         $this->cleanDir($this->smarty->getCacheDir());
         $this->cleanDir($this->smarty->getCompileDir());
     }

@@ -1,4 +1,6 @@
 <?php
+use Royalcms\Component\Smarty\Data;
+
 /**
  * Smarty PHPunit tests getTemplateVars method
  *
@@ -51,8 +53,8 @@ class GetTemplateVarsTest extends PHPUnit_Smarty
      */
     public function testGetSingleTemplateVarScopeAll()
     {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new Data($this->smarty);
+        $data2 = new Data($data1);
         $this->smarty->assign('foo', 'bar');
         $this->smarty->assign('blar', 'buh');
         $this->assertEquals("bar", $this->smarty->getTemplateVars('foo', $data2));
@@ -63,8 +65,8 @@ class GetTemplateVarsTest extends PHPUnit_Smarty
      */
     public function testGetAllTemplateVarsScopeAll()
     {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new Data($this->smarty);
+        $data2 = new Data($data1);
         $this->smarty->assign('foo', 'bar');
         $data1->assign('blar', 'buh');
         $data2->assign('foo2', 'bar2');
@@ -80,8 +82,8 @@ class GetTemplateVarsTest extends PHPUnit_Smarty
      */
     public function testGetAllTemplateVarsScopeAllNoParents()
     {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new Data($this->smarty);
+        $data2 = new Data($data1);
         $this->smarty->assign('foo', 'bar');
         $data1->assign('blar', 'buh');
         $data2->assign('foo2', 'bar2');
@@ -98,8 +100,8 @@ class GetTemplateVarsTest extends PHPUnit_Smarty
     public function testGetSingleTemplateVarsScopeAllNoParents()
     {
         error_reporting(error_reporting() & ~(E_NOTICE | E_USER_NOTICE));
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new Data($this->smarty);
+        $data2 = new Data($data1);
         $this->smarty->assign('foo', 'bar');
         $data1->assign('blar', 'buh');
         $data2->assign('foo2', 'bar2');

@@ -44,7 +44,7 @@ class ClearCompiledTest extends PHPUnit_Smarty
         foreach ($it as $file) {
             $_file = $file->__toString();
 
-            if (preg_match("#[\\\\/]\.#", $_file)) {
+            if (preg_match("#[\\\\/]\\.#", $_file)) {
                 continue;
             }
 
@@ -155,7 +155,7 @@ class ClearCompiledTest extends PHPUnit_Smarty
         foreach ($it as $file) {
             $_file = $file->__toString();
             // skip anything with a /. in it.
-            if (preg_match("#[\\\\/]\.#", $_file) || !$file->isFile()) {
+            if (preg_match("#[\\\\/]\\.#", $_file) || !$file->isFile()) {
                 continue;
             }
 

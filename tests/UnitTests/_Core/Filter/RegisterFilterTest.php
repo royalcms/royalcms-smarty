@@ -1,4 +1,6 @@
 <?php
+use Royalcms\Component\Smarty\Smarty;
+
 /**
  * Smarty PHPunit tests register_filter / unregister_filter methods
  *

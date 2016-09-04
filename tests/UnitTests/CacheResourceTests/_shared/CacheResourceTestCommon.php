@@ -1,4 +1,6 @@
 <?php
+use Royalcms\Component\Smarty\Internal\Template;
+
 /**
  * Smarty PHPunit tests for cache resource file
  *
@@ -28,7 +30,7 @@ class CacheResourceTestCommon extends PHPUnit_Smarty
         $this->assertEquals($a, $b);
     }
 
-    public function compiledPrefilter($text, Smarty_Internal_Template $tpl)
+    public function compiledPrefilter($text, Template $tpl)
     {
         return str_replace('#', $tpl->getVariable('test'), $text);
     }

@@ -1,4 +1,6 @@
 <?php
+use Royalcms\Component\Smarty\Smarty;
+
 /**
  * Smarty PHPunit tests of filter
  *
@@ -13,7 +15,7 @@
  */
 class FilterTest extends PHPUnit_Smarty
 {
-    public $loadSmartyBC = true;
+//     public $loadSmartyBC = true;
     public function setUp()
     {
         $this->setUpSmarty(__DIR__);
@@ -54,12 +56,12 @@ class FilterTest extends PHPUnit_Smarty
         $this->assertEquals("<br>hello world", $this->smarty->fetch($tpl));
     }
 
-    public function testLoadedOutputFilterWrapper()
-    {
-        $this->smartyBC->load_filter(Smarty::FILTER_OUTPUT, 'trimwhitespace');
-        $tpl = $this->smartyBC->createTemplate('eval:{"    <br>hello world"}');
-        $this->assertEquals("<br>hello world", $this->smartyBC->fetch($tpl));
-    }
+//     public function testLoadedOutputFilterWrapper()
+//     {
+//         $this->smartyBC->load_filter(Smarty::FILTER_OUTPUT, 'trimwhitespace');
+//         $tpl = $this->smartyBC->createTemplate('eval:{"    <br>hello world"}');
+//         $this->assertEquals("<br>hello world", $this->smartyBC->fetch($tpl));
+//     }
 
     /**
      * test registered output filter
@@ -71,12 +73,12 @@ class FilterTest extends PHPUnit_Smarty
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
     }
 
-    public function testRegisteredOutputFilterWrapper()
-    {
-        $this->smartyBC->register_outputfilter('myoutputfilter');
-        $tpl = $this->smartyBC->createTemplate('eval:{"hello   world"}');
-        $this->assertEquals("hello world", $this->smartyBC->fetch($tpl));
-    }
+//     public function testRegisteredOutputFilterWrapper()
+//     {
+//         $this->smartyBC->register_outputfilter('myoutputfilter');
+//         $tpl = $this->smartyBC->createTemplate('eval:{"hello   world"}');
+//         $this->assertEquals("hello world", $this->smartyBC->fetch($tpl));
+//     }
 
     /**
      * test registered pre filter

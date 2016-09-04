@@ -1,4 +1,7 @@
 <?php
+use Royalcms\Component\Smarty\Resource;
+use Royalcms\Component\Smarty\Template\Source;
+use Royalcms\Component\Smarty\Internal\Template;
 
 /*
  * Smarty plugin
@@ -10,9 +13,9 @@
  * -------------------------------------------------------------
  */
 
-class Smarty_Resource_Db3 extends Smarty_Resource
+class Smarty_Resource_Db3 extends Resource
 {
-    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
+    public function populate(Source $source, Template $_template = null)
     {
         $source->filepath = 'db3:';
         $source->uid = sha1($source->resource);
@@ -20,12 +23,12 @@ class Smarty_Resource_Db3 extends Smarty_Resource
         $source->exists = true;
     }
 
-    public function getContent(Smarty_Template_Source $source)
+    public function getContent(Source $source)
     {
         return '{$x="hello world"}{$x}';
     }
 
-    public function getCompiledFilepath(Smarty_Internal_Template $_template)
+    public function getCompiledFilepath(Template $_template)
     {
         return false;
     }

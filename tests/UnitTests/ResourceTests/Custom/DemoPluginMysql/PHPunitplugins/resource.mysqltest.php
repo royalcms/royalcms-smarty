@@ -1,4 +1,6 @@
 <?php
+use Royalcms\Component\Smarty\SmartyException;
+
 require_once SMARTY_DIR . '../demo/plugins/resource.mysql.php';
 
 class Smarty_Resource_Mysqltest extends Smarty_Resource_Mysql

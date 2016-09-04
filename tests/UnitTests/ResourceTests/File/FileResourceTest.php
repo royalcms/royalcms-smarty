@@ -1,4 +1,6 @@
 <?php
+use Royalcms\Component\Smarty\SmartyException;
+
 /**
  * Smarty PHPunit tests for File resources
  *

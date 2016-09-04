@@ -1,4 +1,8 @@
 <?php
+use Royalcms\Component\Smarty\Smarty;
+use Royalcms\Component\Smarty\Template\Source;
+use Royalcms\Component\Smarty\Internal\Template;
+use Royalcms\Component\Smarty\Internal\Resource\ResourceFile;
 
 /**
  * Ambiguous Filename Custom Resource Example
@@ -6,7 +10,7 @@
  * @package Resource-examples
  * @author  Rodney Rehm
  */
-class Smarty_Resource_Ambiguous extends Smarty_Internal_Resource_File
+class Smarty_Resource_Ambiguous extends ResourceFile
 {
     protected $directory;
     protected $segment;
@@ -41,7 +45,7 @@ class Smarty_Resource_Ambiguous extends Smarty_Internal_Resource_File
      * @param Smarty_Template_Source   $source    source object
      * @param Smarty_Internal_Template $_template template object
      */
-    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
+    public function populate(Source $source, Template $_template = null)
     {
         $segment = '';
         if ($this->segment) {
