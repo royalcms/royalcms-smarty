@@ -13,7 +13,7 @@
  * @package Smarty
  * @subpackage PluginsInternal
  */
-class Smarty_Internal_Get_Include_Path
+class GetIncludePath
 {
     /**
      * Return full file path from PHP include_path

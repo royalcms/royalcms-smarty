@@ -1,4 +1,7 @@
 <?php namespace Royalcms\Component\Smarty\Internal;
+
+use Exception;
+
 /**
  * Smarty Internal Plugin Templatelexer
  * This is the lexer to break the template source into tokens
@@ -77,7 +80,7 @@ class Templatelexer
                                         'TO'              => 'to',
     );
 
-    function __construct($data, $compiler)
+    public function __construct($data, $compiler)
     {
         //        $this->data = preg_replace("/(\r\n|\r|\n)/", "\n", $data);
         $this->data = $data;
