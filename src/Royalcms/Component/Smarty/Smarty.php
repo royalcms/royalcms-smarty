@@ -92,7 +92,7 @@ if (SMARTY_SPL_AUTOLOAD && set_include_path(get_include_path() . PATH_SEPARATOR 
         spl_autoload_register();
     }
 } else {
-    spl_autoload_register('smartyAutoload');
+//     spl_autoload_register('smartyAutoload');
 }
 
 /**
@@ -793,15 +793,15 @@ class Smarty extends TemplateBase
 
             return $this;
         } elseif (is_object($security_class)) {
-            throw new SmartyException("Class '" . get_class($security_class) . "' must extend Smarty_Security.");
+            throw new SmartyException("Class '" . get_class($security_class) . "' must extend \\Royalcms\\Component\\Smarty\\Security.");
         }
         if ($security_class == null) {
             $security_class = $this->security_class;
         }
         if (!class_exists($security_class)) {
             throw new SmartyException("Security class '$security_class' is not defined");
-        } elseif ($security_class !== 'Smarty_Security' && !is_subclass_of($security_class, 'Smarty_Security')) {
-            throw new SmartyException("Class '$security_class' must extend Smarty_Security.");
+        } elseif ($security_class !== '\Royalcms\Component\Smarty\Security' && !is_subclass_of($security_class, '\Royalcms\Component\Smarty\Security')) {
+            throw new SmartyException("Class '$security_class' must extend \Royalcms\Component\Smarty\Security.");
         } else {
             $this->security_policy = new $security_class($this);
         }
@@ -1514,30 +1514,30 @@ if (Smarty::$_CHARSET !== 'UTF-8') {
 
 
 
-if (function_exists('smartyAutoload')) {
-    /**
-     * Autoloader
-     */
-    function smartyAutoload($class)
-    {
-        $_class = strtolower($class);
-        static $_classes = array(
-            'smarty_config_source' => true,
-            'smarty_config_compiled' => true,
-            'smarty_security' => true,
-            'smarty_cacheresource' => true,
-            'smarty_cacheresource_custom' => true,
-            'smarty_cacheresource_keyvaluestore' => true,
-            'smarty_resource' => true,
-            'smarty_resource_custom' => true,
-            'smarty_resource_uncompiled' => true,
-            'smarty_resource_recompiled' => true,
-        );
+// if ( ! function_exists('smartyAutoload') ) {
+//     /**
+//      * Autoloader
+//      */
+//     function smartyAutoload($class)
+//     {
+//         $_class = strtolower($class);
+//         static $_classes = array(
+//             'smarty_config_source' => true,
+//             'smarty_config_compiled' => true,
+//             'smarty_security' => true,
+//             'smarty_cacheresource' => true,
+//             'smarty_cacheresource_custom' => true,
+//             'smarty_cacheresource_keyvaluestore' => true,
+//             'smarty_resource' => true,
+//             'smarty_resource_custom' => true,
+//             'smarty_resource_uncompiled' => true,
+//             'smarty_resource_recompiled' => true,
+//         );
     
-        if (!strncmp($_class, 'smarty_internal_', 16) || isset($_classes[$_class])) {
-            include SMARTY_SYSPLUGINS_DIR . $_class . '.php';
-        }
-    }
-}
+//         if (!strncmp($_class, 'smarty_internal_', 16) || isset($_classes[$_class])) {
+//             include SMARTY_SYSPLUGINS_DIR . $_class . '.php';
+//         }
+//     }
+// }
 
 

@@ -415,7 +415,7 @@ abstract class Resource
         // try sysplugins dir
         if (isset(self::$sysplugins[$type])) {
             if (!isset(self::$resources[$type])) {
-                $_resource_class = 'Smarty_Internal_Resource_' . ucfirst($type);
+                $_resource_class = '\Royalcms\Component\Smarty\Internal\Resource\Resource' . ucfirst($type);
                 self::$resources[$type] = new $_resource_class();
             }
 
@@ -423,7 +423,7 @@ abstract class Resource
         }
 
         // try plugins dir
-        $_resource_class = 'Smarty_Resource_' . ucfirst($type);
+        $_resource_class = 'Royalcms\Component\Smarty\Resource\\' . ucfirst($type);
         if ($smarty->loadPlugin($_resource_class)) {
             if (isset(self::$resources[$type])) {
                 return $smarty->_resource_handlers[$type] = self::$resources[$type];

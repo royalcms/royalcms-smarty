@@ -57,7 +57,7 @@ abstract class CacheResource
     * @param Smarty_Template_Cached $cached cached object
     * @return booelan true or false if the cached content does not exist
     */
-    abstract public function process(Cached $_template, Cached $cached=null);
+    abstract public function process(Template $_template, Cached $cached=null);
 
     /**
     * Write the rendered template output to cache
@@ -168,14 +168,14 @@ abstract class CacheResource
         // try sysplugins dir
         if (isset(self::$sysplugins[$type])) {
             if (!isset(self::$resources[$type])) {
-                $cache_resource_class = 'Smarty_Internal_CacheResource_' . ucfirst($type);
+                $cache_resource_class = '\Royalcms\Component\Smarty\Internal\CacheResource\\Resource' . ucfirst($type);
                 self::$resources[$type] = new $cache_resource_class();
             }
 
             return $smarty->_cacheresource_handlers[$type] = self::$resources[$type];
         }
         // try plugins dir
-        $cache_resource_class = 'Smarty_CacheResource_' . ucfirst($type);
+        $cache_resource_class = 'Royalcms\Component\Smarty\CacheResource\\' . ucfirst($type);
         if ($smarty->loadPlugin($cache_resource_class)) {
             if (!isset(self::$resources[$type])) {
                 self::$resources[$type] = new $cache_resource_class();
