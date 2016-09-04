@@ -11,10 +11,9 @@
  *
  * @backupStaticAttributes enabled
  */
-class SmartyBcTest extends PHPUnit_Smarty
+class SmartyPhpTest extends PHPUnit_Smarty
 {
-    public $loadSmartyBC = true;
-    public $loadSmarty = false;
+    public $loadSmarty = true;
     public function setUp()
     {
         $this->setUpSmarty(__DIR__);
@@ -30,6 +29,6 @@ class SmartyBcTest extends PHPUnit_Smarty
      */
     public function testSmartyPhpTag()
     {
-        $this->assertEquals('hello world', $this->smartyBC->fetch('eval:{php} echo "hello world"; {/php}'));
+        $this->assertEquals('hello world', $this->smarty->fetch('eval:{php} echo "hello world"; {/php}'));
     }
 }
