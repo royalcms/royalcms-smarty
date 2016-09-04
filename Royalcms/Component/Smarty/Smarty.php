@@ -1,4 +1,10 @@
 <?php namespace Royalcms\Component\Smarty;
+
+use Royalcms\Component\Smarty\Internal\TemplateBase;
+use Royalcms\Component\Smarty\Internal\GetIncludePath;
+use Royalcms\Component\Smarty\Internal\Utility;
+use Royalcms\Component\Smarty\Internal\Template;
+
 /**
  * Project:     Smarty: the PHP compiling template engine
  * File:        Smarty.class.php
@@ -90,21 +96,10 @@ if (SMARTY_SPL_AUTOLOAD && set_include_path(get_include_path() . PATH_SEPARATOR 
 }
 
 /**
- * Load always needed external class files
- */
-include_once SMARTY_SYSPLUGINS_DIR.'smarty_internal_data.php';
-include_once SMARTY_SYSPLUGINS_DIR.'smarty_internal_templatebase.php';
-include_once SMARTY_SYSPLUGINS_DIR.'smarty_internal_template.php';
-include_once SMARTY_SYSPLUGINS_DIR.'smarty_resource.php';
-include_once SMARTY_SYSPLUGINS_DIR.'smarty_internal_resource_file.php';
-include_once SMARTY_SYSPLUGINS_DIR.'smarty_cacheresource.php';
-include_once SMARTY_SYSPLUGINS_DIR.'smarty_internal_cacheresource_file.php';
-
-/**
  * This is the main Smarty class
  * @package Smarty
  */
-class Smarty extends Smarty_Internal_TemplateBase
+class Smarty extends TemplateBase
 {
     /**#@+
      * constant definitions
@@ -759,8 +754,8 @@ class Smarty extends Smarty_Internal_TemplateBase
     public function clearAllCache($exp_time = null, $type = null)
     {
         // load cache resource and call clearAll
-        $_cache_resource = Smarty_CacheResource::load($this, $type);
-        Smarty_CacheResource::invalidLoadedCache($this);
+        $_cache_resource = CacheResource::load($this, $type);
+        CacheResource::invalidLoadedCache($this);
 
         return $_cache_resource->clearAll($this, $exp_time);
     }
@@ -778,8 +773,8 @@ class Smarty extends Smarty_Internal_TemplateBase
     public function clearCache($template_name, $cache_id = null, $compile_id = null, $exp_time = null, $type = null)
     {
         // load cache resource and call clear
-        $_cache_resource = Smarty_CacheResource::load($this, $type);
-        Smarty_CacheResource::invalidLoadedCache($this);
+        $_cache_resource = CacheResource::load($this, $type);
+        CacheResource::invalidLoadedCache($this);
 
         return $_cache_resource->clear($this, $template_name, $cache_id, $compile_id, $exp_time);
     }
@@ -793,7 +788,7 @@ class Smarty extends Smarty_Internal_TemplateBase
      */
     public function enableSecurity($security_class = null)
     {
-        if ($security_class instanceof Smarty_Security) {
+        if ($security_class instanceof Security) {
             $this->security_policy = $security_class;
 
             return $this;
@@ -1235,7 +1230,7 @@ class Smarty extends Smarty_Internal_TemplateBase
         $compile_id = $compile_id === null ? $this->compile_id : $compile_id;
         // already in template cache?
         if ($this->allow_ambiguous_resources) {
-            $_templateId = Smarty_Resource::getUniqueTemplateName($this, $template) . $cache_id . $compile_id;
+            $_templateId = Resource::getUniqueTemplateName($this, $template) . $cache_id . $compile_id;
         } else {
             $_templateId = $this->joined_template_dir . '#' . $template . $cache_id . $compile_id;
         }
@@ -1268,7 +1263,7 @@ class Smarty extends Smarty_Internal_TemplateBase
         if (!empty($data) && is_array($data)) {
             // set up variable values
             foreach ($data as $_key => $_val) {
-                $tpl->tpl_vars[$_key] = new Smarty_variable($_val);
+                $tpl->tpl_vars[$_key] = new Variable($_val);
             }
         }
 
@@ -1333,7 +1328,7 @@ class Smarty extends Smarty_Internal_TemplateBase
                     if ($_stream_resolve_include_path) {
                         $file = stream_resolve_include_path($file);
                     } else {
-                        $file = Smarty_Internal_Get_Include_Path::getIncludePath($file);
+                        $file = GetIncludePath::getIncludePath($file);
                     }
 
                     if ($file !== false) {
@@ -1359,7 +1354,7 @@ class Smarty extends Smarty_Internal_TemplateBase
      */
     public function compileAllTemplates($extension = '.tpl', $force_compile = false, $time_limit = 0, $max_errors = null)
     {
-        return Smarty_Internal_Utility::compileAllTemplates($extension, $force_compile, $time_limit, $max_errors, $this);
+        return Utility::compileAllTemplates($extension, $force_compile, $time_limit, $max_errors, $this);
     }
 
     /**
@@ -1373,7 +1368,7 @@ class Smarty extends Smarty_Internal_TemplateBase
      */
     public function compileAllConfig($extension = '.conf', $force_compile = false, $time_limit = 0, $max_errors = null)
     {
-        return Smarty_Internal_Utility::compileAllConfig($extension, $force_compile, $time_limit, $max_errors, $this);
+        return Utility::compileAllConfig($extension, $force_compile, $time_limit, $max_errors, $this);
     }
 
     /**
@@ -1386,7 +1381,7 @@ class Smarty extends Smarty_Internal_TemplateBase
      */
     public function clearCompiledTemplate($resource_name = null, $compile_id = null, $exp_time = null)
     {
-        return Smarty_Internal_Utility::clearCompiledTemplate($resource_name, $compile_id, $exp_time, $this);
+        return Utility::clearCompiledTemplate($resource_name, $compile_id, $exp_time, $this);
     }
 
 
@@ -1396,9 +1391,9 @@ class Smarty extends Smarty_Internal_TemplateBase
      * @param  object $templae template object
      * @return array  of tag/attributes
      */
-    public function getTags(Smarty_Internal_Template $template)
+    public function getTags(Template $template)
     {
-        return Smarty_Internal_Utility::getTags($template);
+        return Utility::getTags($template);
     }
 
     /**
@@ -1409,7 +1404,7 @@ class Smarty extends Smarty_Internal_TemplateBase
      */
     public function testInstall(&$errors=null)
     {
-        return Smarty_Internal_Utility::testInstall($this, $errors);
+        return Utility::testInstall($this, $errors);
     }
 
     /**
