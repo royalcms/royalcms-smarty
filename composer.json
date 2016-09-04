@@ -30,12 +30,12 @@
   },
   "autoload": {
     "classmap": [
-      "Bootstrap.php",
-      "PHPUnit_Smarty.php"
+      "tests/Bootstrap.php",
+      "tests/PHPUnit_Smarty.php"
     ],
     "psr-4": {
         "Royalcms\\Component\\Smarty\\": "src/"
-    },
+    }
   },
   "extra": {
     "branch-alias": {
