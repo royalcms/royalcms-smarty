@@ -23,7 +23,7 @@ use Royalcms\Component\Smarty\Internal\Write\File;
  * @package Smarty
  * @subpackage Cacher
  */
-class File extends CacheResource
+class ResourceFile extends CacheResource
 {
     /**
      * populate Cached Object with meta data from Resource
@@ -91,7 +91,7 @@ class File extends CacheResource
      * @param Smarty_Template_Cached $cached cached object
      * @return booelan true or false if the cached content does not exist
      */
-    public function process(Template $_template, Cached $cached=null)
+    public function process(Template $_template, Cached $cached = null)
     {
         $_smarty_tpl = $_template;
 
