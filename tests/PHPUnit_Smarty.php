@@ -9,12 +9,6 @@
  */
 class PHPUnit_Smarty extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Smarty object
-     *
-     * @var SmartyBC
-     */
-    public $smartyBC = null;
 
     /**
      * SmartyBC object
@@ -29,13 +23,6 @@ class PHPUnit_Smarty extends PHPUnit_Framework_TestCase
      * @var bool
      */
     public $loadSmarty = true;
-
-    /**
-     * Flag if test is using the SmartyBC object
-     *
-     * @var bool
-     */
-    public $loadSmartyBC = false;
 
     /**
      * Flag for initialization at first test
@@ -149,18 +136,10 @@ class PHPUnit_Smarty extends PHPUnit_Framework_TestCase
         clearstatcache();
         // instance Smarty class
         if ($this->loadSmarty) {
-            $this->smarty = new Smarty;
+            $this->smarty = new Royalcms\Component\Smarty\Smarty;
             if (self::$config['individualFolders'] != 'true') {
                 $this->smarty->setCompileDir(__DIR__ . '/templates_c');
                 $this->smarty->setCacheDir(__DIR__ . '/cache');
-            }
-        }
-        // instance SmartyBC class
-        if ($this->loadSmartyBC) {
-            $this->smartyBC = new SmartyBC;
-            if (self::$config['individualFolders'] != 'true') {
-                $this->smartyBC->setCompileDir(__DIR__ . '/templates_c');
-                $this->smartyBC->setCacheDir(__DIR__ . '/cache');
             }
         }
     }
