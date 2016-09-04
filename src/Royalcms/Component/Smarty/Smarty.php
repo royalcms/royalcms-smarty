@@ -339,12 +339,12 @@ class Smarty extends TemplateBase
     /**
      * class name
      *
-     * This should be instance of Smarty_Security.
+     * This should be instance of \Royalcms\Component\Smarty\Security.
      *
      * @var string
      * @see Smarty_Security
      */
-    public $security_class = 'Smarty_Security';
+    public $security_class = '\Royalcms\Component\Smarty\Security';
     /**
      * implementation of security class
      *
