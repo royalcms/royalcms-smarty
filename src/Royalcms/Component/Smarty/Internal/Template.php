@@ -688,9 +688,9 @@ class Template extends TemplateBase
                 return $this->compiled;
 
             case 'cached':
-                if (!class_exists('Smarty_Template_Cached')) {
-                    include SMARTY_SYSPLUGINS_DIR . 'smarty_cacheresource.php';
-                }
+//                 if (!class_exists('Smarty_Template_Cached')) {
+//                     include SMARTY_SYSPLUGINS_DIR . 'smarty_cacheresource.php';
+//                 }
                 $this->cached = new Cached($this);
 
                 return $this->cached;
