@@ -1,4 +1,10 @@
 <?php
+use Royalcms\Component\Smarty\Smarty;
+use Royalcms\Component\Smarty\Resource;
+use Royalcms\Component\Smarty\CacheResource;
+use Royalcms\Component\Smarty\SmartyException;
+use Royalcms\Component\Smarty\Internal\Template;
+
 /*
  * This file is part of the Smarty PHPUnit tests.
  *
@@ -222,8 +228,6 @@ KEY `expire` (`expire`)
     {
         if (isset($this->smarty)) {
             $this->cleanDir($this->smarty->getCompileDir());
-        } elseif (isset($this->smartyBC)) {
-            $this->cleanDir($this->smartyBC->getCompileDir());
         }
     }
 
@@ -235,8 +239,6 @@ KEY `expire` (`expire`)
     {
         if (isset($this->smarty)) {
             $this->cleanDir($this->smarty->getCacheDir());
-        } elseif (isset($this->smartyBC)) {
-            $this->cleanDir($this->smartyBC->getCacheDir());
         }
     }
 
@@ -372,7 +374,7 @@ KEY `expire` (`expire`)
      *
      * @return null|string
      */
-    public function getBasename(Smarty_Internal_Template $tpl, $name = null, $type = null)
+    public function getBasename(Template $tpl, $name = null, $type = null)
     {
         $name = isset($name) ? $name : $tpl->source->name;
         $type = isset($type) ? $type : $tpl->source->type;
@@ -406,7 +408,7 @@ KEY `expire` (`expire`)
      * @return string
      * @throws \Exception
      */
-    public function buildCompiledPath(Smarty_Internal_Template $tpl, $sub = true, $caching = false, $compile_id = null, $name = null, $type = null, $dir = null)
+    public function buildCompiledPath(Template $tpl, $sub = true, $caching = false, $compile_id = null, $name = null, $type = null, $dir = null)
     {
         $sep = DS;
         $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
@@ -523,40 +525,40 @@ KEY `expire` (`expire`)
      */
     public function clearResourceCache()
     {
-        if (class_exists('Smarty_Resource', false)) {
-            if (isset(Smarty_Resource::$sources) && !empty(Smarty_Resource::$sources)) {
-                foreach (Smarty_Resource::$sources as $obj) {
+        if (class_exists('\Royalcms\Component\Smarty\Resource', false)) {
+            if (isset(Resource::$sources) && !empty(Resource::$sources)) {
+                foreach (Resource::$sources as $obj) {
                     if (isset($obj->smarty)) {
                         $obj->smarty = null;
                     }
                 }
-                Smarty_Resource::$sources = array();
+                Resource::$sources = array();
             }
-            if (isset(Smarty_Resource::$compileds) && !empty(Smarty_Resource::$compileds)) {
-                foreach (Smarty_Resource::$compileds as $obj) {
+            if (isset(Resource::$compileds) && !empty(Resource::$compileds)) {
+                foreach (Resource::$compileds as $obj) {
                     if (isset($obj->smarty)) {
                         $obj->smarty = null;
                     }
                 }
-                Smarty_Resource::$compileds = array();
+                Resource::$compileds = array();
             }
-            if (isset(Smarty_Resource::$resources) && !empty(Smarty_Resource::$resources)) {
-                foreach (Smarty_Resource::$resources as $obj) {
+            if (isset(Resource::$resources) && !empty(Resource::$resources)) {
+                foreach (Resource::$resources as $obj) {
                     if (isset($obj->smarty)) {
                         $obj->smarty = null;
                     }
                 }
-                Smarty_Resource::$resources = array();
+                Resource::$resources = array();
             }
         }
-        if (class_exists('Smarty_CacheResource', false)) {
-            if (isset(Smarty_CacheResource::$resources) && !empty(Smarty_CacheResource::$resources)) {
-                foreach (Smarty_CacheResource::$resources as $obj) {
+        if (class_exists('\Royalcms\Component\Smarty\CacheResource', false)) {
+            if (isset(CacheResource::$resources) && !empty(CacheResource::$resources)) {
+                foreach (CacheResource::$resources as $obj) {
                     if (isset($obj->smarty)) {
                         $obj->smarty = null;
                     }
                 }
-                Smarty_CacheResource::$resources = array();
+                CacheResource::$resources = array();
             }
         }
     }
@@ -574,12 +576,6 @@ KEY `expire` (`expire`)
         }
         if (isset($this->smarty)) {
             $this->smarty = null;
-        }
-        if (isset($this->smartyBC->smarty)) {
-            $this->smartyBC->smarty = null;
-        }
-        if (isset($this->smartyBC)) {
-            $this->smartyBC = null;
         }
     }
 }
