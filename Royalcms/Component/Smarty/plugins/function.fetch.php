@@ -55,7 +55,7 @@ function smarty_function_fetch($params, $template)
     $content = '';
     if ($protocol == 'http') {
         // http fetch
-        if ($uri_parts = parse_url($params['file'])) {
+        if (($uri_parts = parse_url($params['file'])) !== false) {
             // set defaults
             $host = $server_name = $uri_parts['host'];
             $timeout = 30;

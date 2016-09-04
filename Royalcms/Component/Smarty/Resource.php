@@ -1,6 +1,13 @@
 <?php namespace Royalcms\Component\Smarty;
 
 use Royalcms\Component\Smarty\Template\Source;
+use Royalcms\Component\Smarty\Config\Source as ConfigSource;
+use Royalcms\Component\Smarty\Template\Compiled;
+use Royalcms\Component\Smarty\Internal\Template;
+use Royalcms\Component\Smarty\Internal\Config;
+use Royalcms\Component\Smarty\Internal\GetIncludePath;
+use Royalcms\Component\Smarty\Internal\Resource\ResourceRegistered;
+use Royalcms\Component\Smarty\Internal\Resource\ResourceStream;
 
 /**
  * Smarty Resource Plugin
@@ -52,19 +59,19 @@ abstract class Resource
      * Name of the Class to compile this resource's contents with
      * @var string
      */
-    public $compiler_class = 'Smarty_Internal_SmartyTemplateCompiler';
+    public $compiler_class = '\Royalcms\Component\Smarty\Internal\SmartyTemplateCompiler';
 
     /**
      * Name of the Class to tokenize this resource's contents with
      * @var string
      */
-    public $template_lexer_class = 'Smarty_Internal_Templatelexer';
+    public $template_lexer_class = '\Royalcms\Component\Smarty\Internal\Templatelexer';
 
     /**
      * Name of the Class to parse this resource's contents with
      * @var string
      */
-    public $template_parser_class = 'Smarty_Internal_Templateparser';
+    public $template_parser_class = '\Royalcms\Component\Smarty\Internal\Templateparser';
 
     /**
      * Load template's source into current template object
@@ -83,7 +90,7 @@ abstract class Resource
      * @param Smarty_Template_Source   $source    source object
      * @param Smarty_Internal_Template $_template template object
      */
-    abstract public function populate(Source $source, Smarty_Internal_Template $_template=null);
+    abstract public function populate(Source $source, Template $_template = null);
 
     /**
      * populate Source Object with timestamp and exists from Resource
@@ -118,7 +125,7 @@ abstract class Resource
      * @param Smarty_Template_Compiled $compiled  compiled object
      * @param Smarty_Internal_Template $_template template object
      */
-    public function populateCompiledFilepath(Smarty_Template_Compiled $compiled, Smarty_Internal_Template $_template)
+    public function populateCompiledFilepath(Compiled $compiled, Template $_template)
     {
         $_compile_id = isset($_template->compile_id) ? preg_replace('![^\w\|]+!', '_', $_template->compile_id) : null;
         $_filepath = $compiled->source->uid;
@@ -206,10 +213,10 @@ abstract class Resource
      * @return string                   fully qualified filepath
      * @throws SmartyException          if default template handler is registered but not callable
      */
-    protected function buildFilepath(Source $source, Smarty_Internal_Template $_template=null)
+    protected function buildFilepath(Source $source, Template $_template=null)
     {
         $file = $source->name;
-        if ($source instanceof Smarty_Config_Source) {
+        if ($source instanceof ConfigSource) {
             $_directories = $source->smarty->getConfigDir();
             $_default_handler = $source->smarty->default_config_handler_func;
         } else {
@@ -219,7 +226,7 @@ abstract class Resource
 
         // go relative to a given template?
         $_file_is_dotted = $file[0] == '.' && ($file[1] == '.' || $file[1] == '/' || $file[1] == "\\");
-        if ($_template && $_template->parent instanceof Smarty_Internal_Template && $_file_is_dotted) {
+        if ($_template && $_template->parent instanceof Template && $_file_is_dotted) {
             if ($_template->parent->source->type != 'file' && $_template->parent->source->type != 'extends' && !$_template->parent->allow_relative_path) {
                 throw new SmartyException("Template '{$file}' cannot be relative to template of resource type '{$_template->parent->source->type}'");
             }
@@ -301,7 +308,7 @@ abstract class Resource
                     if ($_stream_resolve_include_path) {
                         $_filepath = stream_resolve_include_path($_filepath);
                     } else {
-                        $_filepath = Smarty_Internal_Get_Include_Path::getIncludePath($_filepath);
+                        $_filepath = GetIncludePath::getIncludePath($_filepath);
                     }
 
                     if ($_filepath !== false) {
@@ -321,7 +328,7 @@ abstract class Resource
         // no tpl file found
         if ($_default_handler) {
             if (!is_callable($_default_handler)) {
-                if ($source instanceof Smarty_Config_Source) {
+                if ($source instanceof ConfigSource) {
                     throw new SmartyException("Default config handler not callable");
                 } else {
                     throw new SmartyException("Default template handler not callable");
@@ -389,14 +396,14 @@ abstract class Resource
 
         // try registered resource
         if (isset($smarty->registered_resources[$type])) {
-            if ($smarty->registered_resources[$type] instanceof Smarty_Resource) {
+            if ($smarty->registered_resources[$type] instanceof Resource) {
                 $smarty->_resource_handlers[$type] = $smarty->registered_resources[$type];
                 // note registered to smarty is not kept unique!
                 return $smarty->_resource_handlers[$type];
             }
 
             if (!isset(self::$resources['registered'])) {
-                self::$resources['registered'] = new Smarty_Internal_Resource_Registered();
+                self::$resources['registered'] = new ResourceRegistered();
             }
             if (!isset($smarty->_resource_handlers[$type])) {
                 $smarty->_resource_handlers[$type] = self::$resources['registered'];
@@ -447,7 +454,7 @@ abstract class Resource
                 $smarty->security_policy->isTrustedStream($type);
             }
             if (!isset(self::$resources['stream'])) {
-                self::$resources['stream'] = new Smarty_Internal_Resource_Stream();
+                self::$resources['stream'] = new ResourceStream();
             }
 
             return $smarty->_resource_handlers[$type] = self::$resources['stream'];
@@ -502,10 +509,10 @@ abstract class Resource
     {
         self::parseResourceName($template_resource, $template->smarty->default_resource_type, $name, $type);
         // TODO: optimize for Smarty's internal resource types
-        $resource = Smarty_Resource::load($template->smarty, $type);
+        $resource = self::load($template->smarty, $type);
         // go relative to a given template?
         $_file_is_dotted = $name[0] == '.' && ($name[1] == '.' || $name[1] == '/' || $name[1] == "\\");
-        if ($template instanceof Smarty_Internal_Template && $_file_is_dotted && ($template->source->type == 'file' || $template->parent->source->type == 'extends')) {
+        if ($template instanceof Template && $_file_is_dotted && ($template->source->type == 'file' || $template->parent->source->type == 'extends')) {
             $name = dirname($template->source->filepath) . DS . $name;
         }
         return $resource->buildUniqueResourceName($template->smarty, $name);
@@ -521,7 +528,7 @@ abstract class Resource
      * @param  string                   $template_resource resource identifier
      * @return Smarty_Template_Source   Source Object
      */
-    public static function source(Smarty_Internal_Template $_template=null, Smarty $smarty=null, $template_resource=null)
+    public static function source(Template $_template=null, Smarty $smarty=null, $template_resource=null)
     {
         if ($_template) {
             $smarty = $_template->smarty;
@@ -530,10 +537,10 @@ abstract class Resource
 
         // parse resource_name, load resource handler, identify unique resource name
         self::parseResourceName($template_resource, $smarty->default_resource_type, $name, $type);
-        $resource = Smarty_Resource::load($smarty, $type);
+        $resource = self::load($smarty, $type);
         // go relative to a given template?
         $_file_is_dotted = isset($name[0]) && $name[0] == '.' && ($name[1] == '.' || $name[1] == '/' || $name[1] == "\\");
-        if ($_file_is_dotted && isset($_template) && $_template->parent instanceof Smarty_Internal_Template && ($_template->parent->source->type == 'file' || $_template->parent->source->type == 'extends')) {
+        if ($_file_is_dotted && isset($_template) && $_template->parent instanceof Template && ($_template->parent->source->type == 'file' || $_template->parent->source->type == 'extends')) {
             $name2 = dirname($_template->parent->source->filepath) . DS . $name;
         } else {
             $name2 = $name;
@@ -565,7 +572,7 @@ abstract class Resource
      * @param  Smarty_Internal_Config $_config config object
      * @return Smarty_Config_Source   Source Object
      */
-    public static function config(Smarty_Internal_Config $_config)
+    public static function config(Config $_config)
     {
         static $_incompatible_resources = array('eval' => true, 'string' => true, 'extends' => true, 'php' => true);
         $config_resource = $_config->config_resource;
@@ -580,7 +587,7 @@ abstract class Resource
         }
 
         // load resource handler, identify unique resource name
-        $resource = Smarty_Resource::load($smarty, $type);
+        $resource = self::load($smarty, $type);
         $unique_resource_name = $resource->buildUniqueResourceName($smarty, $name, true);
 
         // check runtime cache
@@ -590,7 +597,7 @@ abstract class Resource
         }
 
         // create source
-        $source = new Smarty_Config_Source($resource, $smarty, $config_resource, $type, $name, $unique_resource_name);
+        $source = new ConfigSource($resource, $smarty, $config_resource, $type, $name, $unique_resource_name);
         $resource->populate($source, null);
 
         // runtime cache

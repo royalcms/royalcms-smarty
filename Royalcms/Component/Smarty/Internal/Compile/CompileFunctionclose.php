@@ -1,6 +1,7 @@
 <?php namespace Royalcms\Component\Smarty\Internal\Compile;
 
 use Royalcms\Component\Smarty\Internal\CompileBase;
+use Royalcms\Component\Smarty\Internal\Parsetrees\Linebreak;
 
 /**
  * Smarty Internal Plugin Compile Functionclose Class
@@ -45,7 +46,7 @@ class CompileFunctionclose extends CompileBase
         }
         // remove last line break from function definition
         $last = count($compiler->parser->current_buffer->subtrees) - 1;
-        if ($compiler->parser->current_buffer->subtrees[$last] instanceof _smarty_linebreak) {
+        if ($compiler->parser->current_buffer->subtrees[$last] instanceof Linebreak) {
             unset($compiler->parser->current_buffer->subtrees[$last]);
         }
         // if caching save template function for possible nocache call

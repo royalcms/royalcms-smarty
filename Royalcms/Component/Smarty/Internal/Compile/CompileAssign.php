@@ -1,6 +1,8 @@
 <?php namespace Royalcms\Component\Smarty\Internal\Compile;
 
 use Royalcms\Component\Smarty\Smarty;
+use Royalcms\Component\Smarty\SmartyBC;
+use Royalcms\Component\Smarty\Variable;
 use Royalcms\Component\Smarty\Internal\CompileBase;
 
 /**
@@ -46,7 +48,7 @@ class CompileAssign extends CompileBase
             if (isset($compiler->template->tpl_vars[trim($_attr['var'], "'")])) {
                 $compiler->template->tpl_vars[trim($_attr['var'], "'")]->nocache = true;
             } else {
-                $compiler->template->tpl_vars[trim($_attr['var'], "'")] = new Smarty_variable(null, true);
+                $compiler->template->tpl_vars[trim($_attr['var'], "'")] = new Variable(null, true);
             }
         }
         // scope setup

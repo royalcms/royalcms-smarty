@@ -10,11 +10,6 @@
  */
 
 /**
- * @ignore
- */
-include 'smarty_internal_parsetree.php';
-
-/**
  * Class SmartyTemplateCompiler
  *
  * @package Smarty
@@ -96,7 +91,7 @@ class SmartyTemplateCompiler extends TemplateCompilerBase
         $this->parser = new $this->parser_class($this->lex, $this);
         if ($this->inheritance_child) {
             // start state on child templates
-            $this->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBODY);
+            $this->lex->yypushstate(Templatelexer::CHILDBODY);
         }
         if ($this->smarty->_parserdebug) {
             $this->parser->PrintTrace();

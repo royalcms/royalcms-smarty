@@ -1,5 +1,8 @@
 <?php namespace Royalcms\Component\Smarty\Internal\Config\File;
 
+use Royalcms\Component\Smarty\Internal\Config;
+use Royalcms\Component\Smarty\Internal\Configfilelexer;
+use Royalcms\Component\Smarty\Internal\Configfileparser;
 use Royalcms\Component\Smarty\SmartyCompilerException;
 
 /**
@@ -74,7 +77,7 @@ class Compiler
      * @param  Smarty_Internal_Config $config config object
      * @return bool                   true if compiling succeeded, false if it failed
      */
-    public function compileSource(Smarty_Internal_Config $config)
+    public function compileSource(Config $config)
     {
         /* here is where the compiling takes place. Smarty
           tags in the templates are replaces with PHP code,
@@ -87,8 +90,8 @@ class Compiler
             return true;
         }
         // init the lexer/parser to compile the config file
-        $lex = new Smarty_Internal_Configfilelexer($_content, $this->smarty);
-        $parser = new Smarty_Internal_Configfileparser($lex, $this);
+        $lex = new Configfilelexer($_content, $this->smarty);
+        $parser = new Configfileparser($lex, $this);
         if ($this->smarty->_parserdebug) $parser->PrintTrace();
         // get tokens from lexer and parse them
         while ($lex->yylex()) {
@@ -112,8 +115,8 @@ class Compiler
      */
     public function trigger_config_file_error($args = null)
     {
-        $this->lex = Smarty_Internal_Configfilelexer::instance();
-        $this->parser = Smarty_Internal_Configfileparser::instance();
+        $this->lex = Configfilelexer::instance();
+        $this->parser = Configfileparser::instance();
         // get template source line which has error
         $line = $this->lex->line;
         if (isset($args)) {

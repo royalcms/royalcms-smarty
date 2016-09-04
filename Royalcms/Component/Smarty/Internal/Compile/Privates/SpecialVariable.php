@@ -30,7 +30,7 @@ class SpecialVariable extends CompileBase
      */
     public function compile($args, $compiler, $parameter)
     {
-        $_index = preg_split("/\]\[/",substr($parameter, 1, strlen($parameter)-2));
+        $_index = preg_split('/\]\[/', substr($parameter, 1, strlen($parameter)-2));
         $compiled_ref = ' ';
         $variable = trim($_index[0], "'");
         switch ($variable) {

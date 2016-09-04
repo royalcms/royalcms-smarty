@@ -1,6 +1,8 @@
 <?php namespace Royalcms\Component\Smarty\Internal\Compile;
 
 use Royalcms\Component\Smarty\Internal\CompileBase;
+use Royalcms\Component\Smarty\Internal\Parsetrees\TemplateBuffer;
+use Royalcms\Component\Smarty\Internal\Parsetrees\Tag;
 
 /**
  * Smarty Internal Plugin Compile Function
@@ -80,12 +82,12 @@ class CompileFunction extends CompileBase
     function smarty_template_function_{$_name}(\$_smarty_tpl,\$params) {
     \$saved_tpl_vars = \$_smarty_tpl->tpl_vars;
     foreach (\$_smarty_tpl->smarty->template_functions['{$_name}']['parameter'] as \$key => \$value) {\$_smarty_tpl->tpl_vars[\$key] = new Smarty_variable(\$value);};
-    foreach (\$params as \$key => \$value) {\$_smarty_tpl->tpl_vars[\$key] = new Smarty_variable(\$value);}?>";
+    foreach (\$params as \$key => \$value) {\$_smarty_tpl->tpl_vars[\$key] = new \Royalcms\Component\Smarty\Variable(\$value);}?>";
         }
         // Init temporay context
         $compiler->template->required_plugins = array('compiled' => array(), 'nocache' => array());
-        $compiler->parser->current_buffer = new _smarty_template_buffer($compiler->parser);
-        $compiler->parser->current_buffer->append_subtree(new _smarty_tag($compiler->parser, $output));
+        $compiler->parser->current_buffer = new TemplateBuffer($compiler->parser);
+        $compiler->parser->current_buffer->append_subtree(new Tag($compiler->parser, $output));
         $compiler->template->has_nocache_code = false;
         $compiler->has_code = false;
         $compiler->template->properties['function'][$_name]['compiled'] = '';

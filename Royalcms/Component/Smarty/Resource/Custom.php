@@ -1,5 +1,6 @@
 <?php namespace Royalcms\Component\Smarty\Resource;
 
+use Royalcms\Component\Smarty\SmartyException;
 use Royalcms\Component\Smarty\Resource;
 use Royalcms\Component\Smarty\Template\Source;
 use Royalcms\Component\Smarty\Internal\Template;

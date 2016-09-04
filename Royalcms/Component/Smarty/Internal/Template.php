@@ -194,7 +194,7 @@ class Template extends TemplateBase
         }
         // compile locking
         if ($this->smarty->compile_locking && !$this->source->recompiled) {
-            if ($saved_timestamp = $this->compiled->timestamp) {
+            if (($saved_timestamp = $this->compiled->timestamp) !== false) {
                 touch($this->compiled->filepath);
             }
         }

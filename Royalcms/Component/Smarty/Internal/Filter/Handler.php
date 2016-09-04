@@ -61,7 +61,8 @@ class Handler
                 if (is_array($template->smarty->registered_filters[$type][$key])) {
                     $output = call_user_func($template->smarty->registered_filters[$type][$key], $output, $template);
                 } else {
-                    $output = $template->smarty->registered_filters[$type][$key]($output, $template);
+                    $function_name = $template->smarty->registered_filters[$type][$key];
+                    $output = $function_name($output, $template);
                 }
             }
         }

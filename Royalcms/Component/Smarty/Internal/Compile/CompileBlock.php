@@ -1,6 +1,11 @@
 <?php namespace Royalcms\Component\Smarty\Internal\Compile;
 
 use Royalcms\Component\Smarty\Internal\CompileBase;
+use Royalcms\Component\Smarty\Internal\Templatelexer;
+use Royalcms\Component\Smarty\Internal\Template;
+use Royalcms\Component\Smarty\Internal\Debug;
+use Royalcms\Component\Smarty\Internal\Parsetrees\TemplateBuffer;
+use Royalcms\Component\Smarty\Internal\Compile\CompileBlock;
 
 /**
  * Smarty Internal Plugin Compile Block
@@ -97,7 +102,7 @@ class CompileBlock extends CompileBase
             $this->openTag($compiler, 'block', $save);
             // set flag for {block} tag
             $compiler->inheritance = true;
-            $compiler->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBLOCK);
+            $compiler->lex->yypushstate(Templatelexer::CHILDBLOCK);
             $compiler->has_code = false;
             return;
         }
@@ -110,7 +115,7 @@ class CompileBlock extends CompileBase
         $compiler->inheritance = true;
         $compiler->nocache = $compiler->nocache | $compiler->tag_nocache;
 
-        $compiler->parser->current_buffer = new _smarty_template_buffer($compiler->parser);
+        $compiler->parser->current_buffer = new TemplateBuffer($compiler->parser);
         $compiler->has_code = false;
 
         return true;
@@ -127,13 +132,13 @@ class CompileBlock extends CompileBase
     static function compileChildBlock($compiler, $_name = null)
     {
         if ($compiler->inheritance_child) {
-            $name1 = Smarty_Internal_Compile_Block::$nested_block_names[0];
+            $name1 = CompileBlock::$nested_block_names[0];
             if (isset($compiler->template->block_data[$name1])) {
                 //  replace inner block name with generic
-                Smarty_Internal_Compile_Block::$block_data[$name1]['source'] .= $compiler->template->block_data[$name1]['source'];
-                Smarty_Internal_Compile_Block::$block_data[$name1]['child'] = true;
+                CompileBlock::$block_data[$name1]['source'] .= $compiler->template->block_data[$name1]['source'];
+                CompileBlock::$block_data[$name1]['child'] = true;
             }
-            $compiler->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBLOCK);
+            $compiler->lex->yypushstate(Templatelexer::CHILDBLOCK);
             $compiler->has_code = false;
             return;
         }
@@ -157,10 +162,10 @@ class CompileBlock extends CompileBase
         }
         // flag that child is already compile by {$smarty.block.child} inclusion
         $compiler->template->block_data[$_name]['compiled'] = true;
-        $_tpl = new Smarty_Internal_template('string:' . $compiler->template->block_data[$_name]['source'], $compiler->smarty, $compiler->template, $compiler->template->cache_id,
+        $_tpl = new Template('string:' . $compiler->template->block_data[$_name]['source'], $compiler->smarty, $compiler->template, $compiler->template->cache_id,
             $compiler->template->compile_id, $compiler->template->caching, $compiler->template->cache_lifetime);
         if ($compiler->smarty->debugging) {
-            Smarty_Internal_Debug::ignore($_tpl);
+            Debug::ignore($_tpl);
         }
         $_tpl->tpl_vars = $compiler->template->tpl_vars;
         $_tpl->variable_filters = $compiler->template->variable_filters;
@@ -227,11 +232,11 @@ class CompileBlock extends CompileBase
         if ($_name == null) {
             $compiler->trigger_template_error(' tag {$smarty.block.parent} used outside {block} tags ', $compiler->lex->taglineno);
         }
-        if (empty(Smarty_Internal_Compile_Block::$nested_block_names)) {
+        if (empty(CompileBlock::$nested_block_names)) {
             $compiler->trigger_template_error(' illegal {$smarty.block.parent} in parent template ', $compiler->lex->taglineno);
         }
-        Smarty_Internal_Compile_Block::$block_data[Smarty_Internal_Compile_Block::$nested_block_names[0]]['source'] .= Smarty_Internal_Compile_Block::parent;
-        $compiler->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBLOCK);
+        CompileBlock::$block_data[CompileBlock::$nested_block_names[0]]['source'] .= CompileBlock::parent;
+        $compiler->lex->yypushstate(Templatelexer::CHILDBLOCK);
         $compiler->has_code = false;
         return;
     }
@@ -244,7 +249,7 @@ class CompileBlock extends CompileBase
      */
     static function blockSource($compiler, $source)
     {
-        Smarty_Internal_Compile_Block::$block_data[Smarty_Internal_Compile_Block::$nested_block_names[0]]['source'] .= $source;
+        CompileBlock::$block_data[CompileBlock::$nested_block_names[0]]['source'] .= $source;
     }
 
 }
