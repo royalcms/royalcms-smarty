@@ -2096,7 +2096,7 @@ class Templateparser#line 80 "smarty_internal_templateparser.php"
     function yy_r4(){
     if ($this->compiler->has_code) {
         $tmp =''; foreach ($this->compiler->prefix_code as $code) {$tmp.=$code;} $this->compiler->prefix_code=array();
-        $this->_retvalue = new _smarty_tag($this, $this->compiler->processNocacheCode($tmp.$this->yystack[$this->yyidx + -1]->minor,true));
+        $this->_retvalue = new Tag($this, $this->compiler->processNocacheCode($tmp.$this->yystack[$this->yyidx + -1]->minor,true));
     } else { 
         $this->_retvalue = null;
     }  
