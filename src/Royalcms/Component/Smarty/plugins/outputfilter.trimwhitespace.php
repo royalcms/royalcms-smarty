@@ -1,4 +1,6 @@
 <?php
+use Royalcms\Component\Smarty\Internal\Template;
+
 /**
  * Smarty plugin
  *
@@ -17,7 +19,7 @@
  * @return string filtered output
  * @todo substr_replace() is not overloaded by mbstring.func_overload - so this function might fail!
  */
-function smarty_outputfilter_trimwhitespace($source, Smarty_Internal_Template $smarty)
+function smarty_outputfilter_trimwhitespace($source, Template $smarty)
 {
     $store = array();
     $_store = 0;

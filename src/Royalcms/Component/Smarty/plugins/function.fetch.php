@@ -1,4 +1,7 @@
 <?php
+use Royalcms\Component\Smarty\Smarty;
+use Royalcms\Component\Smarty\SmartyException;
+
 /**
  * Smarty plugin
  *

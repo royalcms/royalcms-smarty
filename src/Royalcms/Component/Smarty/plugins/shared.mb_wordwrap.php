@@ -1,4 +1,6 @@
 <?php
+use Royalcms\Component\Smarty\Smarty;
+
 /**
  * Smarty shared plugin
  *
