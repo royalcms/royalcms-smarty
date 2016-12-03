@@ -830,4 +830,10 @@ class Utility
         return $status;
     }
 
+    public static function convertUnderlineToUcfirst ( $str )
+    {
+        $str = ucwords(str_replace('_', ' ', $str));
+        $str = str_replace(' ', '', $str);
+        return $str;
+    }
 }
