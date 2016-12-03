@@ -334,6 +334,9 @@ abstract class Resource
                     throw new SmartyException("Default template handler not callable");
                 }
             }
+            
+            $_content = $_timestamp = null;
+            
             $_return = call_user_func_array($_default_handler,
                 array($source->type, $source->name, &$_content, &$_timestamp, $source->smarty));
             if (is_string($_return)) {
@@ -423,7 +426,7 @@ abstract class Resource
         }
 
         // try plugins dir
-        $_resource_class = 'Royalcms\Component\Smarty\Resource\\' . ucfirst($type);
+        $_resource_class = '\Royalcms\Component\Smarty\Resource\\' . ucfirst($type);
         if ($smarty->loadPlugin($_resource_class)) {
             if (isset(self::$resources[$type])) {
                 return $smarty->_resource_handlers[$type] = self::$resources[$type];
@@ -507,6 +510,8 @@ abstract class Resource
      */
     public static function getUniqueTemplateName($template, $template_resource)
     {
+        $name = $type = null;
+        
         self::parseResourceName($template_resource, $template->smarty->default_resource_type, $name, $type);
         // TODO: optimize for Smarty's internal resource types
         $resource = self::load($template->smarty, $type);
@@ -535,6 +540,8 @@ abstract class Resource
             $template_resource = $_template->template_resource;
         }
 
+        $name = $type = null;
+        
         // parse resource_name, load resource handler, identify unique resource name
         self::parseResourceName($template_resource, $smarty->default_resource_type, $name, $type);
         $resource = self::load($smarty, $type);
@@ -578,6 +585,8 @@ abstract class Resource
         $config_resource = $_config->config_resource;
         $smarty = $_config->smarty;
 
+        $name = $type = null;
+        
         // parse resource_name
         self::parseResourceName($config_resource, $smarty->default_config_type, $name, $type);
 
