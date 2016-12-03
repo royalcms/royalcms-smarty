@@ -77,7 +77,7 @@ class ConfigLoadTag extends CompileBase
            }
         }
         // create config object
-        $_output = "<?php  \$_config = new Smarty_Internal_Config($conf_file, \$_smarty_tpl->smarty, \$_smarty_tpl);";
+        $_output = "<?php  \$_config = new \Royalcms\Component\Smarty\Internal\Config($conf_file, \$_smarty_tpl->smarty, \$_smarty_tpl);";
         $_output .= "\$_config->loadConfigVars($section, '$scope'); ?>";
 
         return $_output;

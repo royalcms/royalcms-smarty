@@ -114,13 +114,13 @@ class CallTag extends CompileBase
         // was there an assign attribute
         if (isset($_assign)) {
             if ($compiler->template->caching) {
-                $_output = "<?php ob_start(); Smarty_Internal_Function_Call_Handler::call ({$call_cache},\$_smarty_tpl,{$_params},'{$_hash}',{$_nocache}); \$_smarty_tpl->assign({$_assign}, ob_get_clean());?>\n";
+                $_output = "<?php ob_start(); \Royalcms\Component\Smarty\Internal\Functions\Call\Handler::call ({$call_cache},\$_smarty_tpl,{$_params},'{$_hash}',{$_nocache}); \$_smarty_tpl->assign({$_assign}, ob_get_clean());?>\n";
             } else {
                 $_output = "<?php ob_start(); {$call_function}(\$_smarty_tpl,{$_params}); \$_smarty_tpl->assign({$_assign}, ob_get_clean());?>\n";
             }
         } else {
             if ($compiler->template->caching) {
-                $_output = "<?php Smarty_Internal_Function_Call_Handler::call ({$call_cache},\$_smarty_tpl,{$_params},'{$_hash}',{$_nocache});?>\n";
+                $_output = "<?php \Royalcms\Component\Smarty\Internal\Functions\Call\Handler::call ({$call_cache},\$_smarty_tpl,{$_params},'{$_hash}',{$_nocache});?>\n";
             } else {
                 $_output = "<?php {$call_function}(\$_smarty_tpl,{$_params});?>\n";
             }
