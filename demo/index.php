@@ -5,10 +5,10 @@
  * @package Example-application
  */
 
-require '../libs/Smarty.class.php';
+require '../vendor/autoload.php';
 
-$smarty = new Smarty;
-
+$smarty = new \Royalcms\Component\Smarty\Smarty;
+// var_dump($smarty);exit;
 //$smarty->force_compile = true;
 $smarty->debugging = true;
 $smarty->caching = true;
