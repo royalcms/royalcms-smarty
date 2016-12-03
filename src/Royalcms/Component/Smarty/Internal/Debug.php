@@ -1,7 +1,7 @@
 <?php namespace Royalcms\Component\Smarty\Internal;
 
 use Royalcms\Component\Smarty\Smarty;
-use Royalcms\Component\Smarty\Data;
+use Royalcms\Component\Smarty\Data as SmartyData;
 use Royalcms\Component\Smarty\Internal\Template;
 
 /**
@@ -20,7 +20,7 @@ use Royalcms\Component\Smarty\Internal\Template;
  * @package Smarty
  * @subpackage Debug
  */
-class Debug extends Data
+class Debug extends SmartyData
 {
     /**
      * template data
