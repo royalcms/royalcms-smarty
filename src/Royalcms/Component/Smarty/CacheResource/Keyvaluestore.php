@@ -37,7 +37,7 @@ use Royalcms\Component\Smarty\Internal\Template;
  * @subpackage Cacher
  * @author Rodney Rehm
  */
-abstract class KeyValueStore extends CacheResource
+abstract class Keyvaluestore extends CacheResource
 {
     /**
      * cache for contents
