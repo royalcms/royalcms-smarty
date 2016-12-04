@@ -20,7 +20,7 @@ use Royalcms\Component\Smarty\Internal\CompileBase;
  * @package Smarty
  * @subpackage Compiler
  */
-class PrivateModifierTag extends CompileBase
+class ModifierTag extends CompileBase
 {
     /**
      * Compiles code for modifier execution
