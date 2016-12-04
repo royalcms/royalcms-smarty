@@ -1202,6 +1202,14 @@ class Smarty extends TemplateBase
 
         return $this;
     }
+    
+    /**
+     * @param boolean $merge_compiled_includes
+     */
+    public function setMergeCompiledIncludes($merge_compiled_includes)
+    {
+        $this->merge_compiled_includes = $merge_compiled_includes;
+    }
 
     /**
      * creates a template object
@@ -1286,8 +1294,22 @@ class Smarty extends TemplateBase
         if ($check && (is_callable($plugin_name) || class_exists($plugin_name, false))) {
             return true;
         }
+        
         // Plugin name is expected to be: Smarty_[Type]_[Name]
-        $_name_parts = explode('_', $plugin_name, 3);
+//         echo $plugin_name . "<br />";
+        if (strpos($plugin_name, '_') !== false) {
+//             echo $plugin_name;
+            
+            $_name_parts = explode('_', $plugin_name, 3);
+//             var_dump($_name_parts);exit;
+        } else {
+            $_name_parts = explode('\\', trim($plugin_name, '\\'), 6);
+            array_shift($_name_parts);
+            array_shift($_name_parts);
+            
+//             if ($plugin_name == '\Royalcms\Component\Smarty\Internal\Compile\ConfigLoadTag') var_dump($_name_parts);
+        }
+        
         // class name must have three parts to be valid plugin
         // count($_name_parts) < 3 === !isset($_name_parts[2])
         if (!isset($_name_parts[2]) || strtolower($_name_parts[0]) !== 'smarty') {
@@ -1296,21 +1318,23 @@ class Smarty extends TemplateBase
             return false;
         }
         // if type is "internal", get plugin from sysplugins
+        // @todo already autoload plugin class, Don't need manual load class.
         if (strtolower($_name_parts[1]) == 'internal') {
-            $file = SMARTY_SYSPLUGINS_DIR . strtolower($plugin_name) . '.php';
-            if (file_exists($file)) {
-                require_once($file);
+//             $file = SMARTY_SYSPLUGINS_DIR . strtolower($plugin_name) . '.php';
+//             if (file_exists($file)) {
+//                 require_once($file);
 
-                return $file;
-            } else {
-                return false;
-            }
+//                 return $file;
+//             } else {
+//                 return false;
+//             }
+            return true;
         }
         // plugin filename is expected to be: [type].[name].php
         $_plugin_filename = "{$_name_parts[1]}.{$_name_parts[2]}.php";
 
         $_stream_resolve_include_path = function_exists('stream_resolve_include_path');
-
+//         if ($plugin_name == '\Royalcms\Component\Smarty\Internal\Compile\ConfigLoadTag') $plugin_name;
         // loop through plugin dirs and find the plugin
         foreach ($this->getPluginsDir() as $_plugin_dir) {
             $names = array(
