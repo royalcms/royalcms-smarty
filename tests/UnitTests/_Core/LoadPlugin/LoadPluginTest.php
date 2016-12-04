@@ -31,7 +31,7 @@ class LoadPluginTest extends PHPUnit_Smarty
      */
     public function testLoadPluginSmartyInternalDebug()
     {
-        $this->assertTrue($this->smarty->loadPlugin('Smarty_Internal_Debug') == true);
+        $this->assertTrue($this->smarty->loadPlugin('\Royalcms\Component\Smarty\Internal\Debug') == true);
     }
 
     /**
