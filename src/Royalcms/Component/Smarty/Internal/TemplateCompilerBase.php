@@ -6,6 +6,7 @@ use Royalcms\Component\Smarty\SmartyCompilerException;
 use Royalcms\Component\Smarty\Internal\Template;
 use Royalcms\Component\Smarty\Internal\Debug;
 use Royalcms\Component\Smarty\Internal\Filter\Handler;
+use Royalcms\Component\Smarty\Internal\Utility;
 
 /**
  * Smarty Internal Plugin Smarty Template Compiler Base
@@ -250,7 +251,7 @@ abstract class TemplateCompilerBase
         }
         $loop = 0;
         // the $this->sources array can get additional elements while compiling by the {extends} tag
-        while (($this->template->source = array_shift($this->sources)) !== false) {
+        while (($this->template->source = array_shift($this->sources)) !== null) {
             $this->smarty->_current_file = $this->template->source->filepath;
             if ($this->smarty->debugging) {
                 Debug::start_compile($this->template);
@@ -340,6 +341,12 @@ abstract class TemplateCompilerBase
         ) {
             $this->tag_nocache = true;
         }
+        
+        if (strpos($tag, 'private_') === 0) {
+            $tagName = str_replace('private_', '', $tag);
+            return $this->callTagCompiler('Privates\\'.Utility::convertUnderlineToUcfirst($tagName), $args, $parameter);
+        }
+        
         // compile the smarty tag (required compile classes to compile the tag are autoloaded)
         if (($_output = $this->callTagCompiler($tag, $args, $parameter)) === false) {
             if (isset($this->smarty->template_functions[$tag])) {
@@ -413,7 +420,7 @@ abstract class TemplateCompilerBase
                         }
                         // compile registered function or block function
                         if ($plugin_type == Smarty::PLUGIN_FUNCTION || $plugin_type == Smarty::PLUGIN_BLOCK) {
-                            return $this->callTagCompiler('Privates\Registered_' . $plugin_type, $args, $parameter, $tag);
+                            return $this->callTagCompiler('Privates\Registered' . ucfirst($plugin_type), $args, $parameter, $tag);
                         }
                     }
                 }
@@ -444,7 +451,7 @@ abstract class TemplateCompilerBase
                     } else {
                         if (($function = $this->getPlugin($tag, $plugin_type)) !== false) {
                             if (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this)) {
-                                return $this->callTagCompiler('Privates\\' . $plugin_type . '_plugin', $args, $parameter, $tag, $function);
+                                return $this->callTagCompiler('Privates\\' . ucfirst($plugin_type) . 'Plugin', $args, $parameter, $tag, $function);
                             }
                         }
                     }
@@ -483,7 +490,7 @@ abstract class TemplateCompilerBase
                                 return call_user_func_array($function, array($new_args, $this));
                             }
                         } else {
-                            return $this->callTagCompiler('private_registered_' . $plugin_type, $args, $parameter, $tag);
+                            return $this->callTagCompiler('Privates\Registered' . ucfirst($plugin_type), $args, $parameter, $tag);
                         }
                     }
                 }
@@ -563,7 +570,13 @@ abstract class TemplateCompilerBase
             return self::$_tag_objects[$tag]->compile($args, $this, $param1, $param2, $param3);
         }
         // lazy load internal compiler plugin
-        $class_name = '\Royalcms\Component\Smarty\Internal\Compile\\' . ucfirst($tag) . 'Tag';
+        $class_name = '\Royalcms\Component\Smarty\Internal\Compile\\' . Utility::convertUnderlineToUcfirst($tag) . 'Tag';
+//         if ($tag == 'config_load') {
+//             $this->smarty->loadPlugin($class_name);
+//             echo "1";
+//             echo $class_name;
+//             exit;
+//         }
         if ($this->smarty->loadPlugin($class_name)) {
             // check if tag allowed by security
             if (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this)) {
